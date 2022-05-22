@@ -10,6 +10,7 @@ class Principal extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            //TExto programador de reuniones
             Text('Programador de reuniones'),
             ElevatedButton(
                 onPressed: () {
