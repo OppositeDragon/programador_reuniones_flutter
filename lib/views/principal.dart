@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:programador_reuniones_flutter/views/login_view.dart';
+import 'package:go_router/go_router.dart';
 
 class Principal extends StatelessWidget {
   const Principal({super.key});
@@ -7,16 +7,18 @@ class Principal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Text('Programador de reuniones'),
-            ElevatedButton(
-                onPressed: () {
-                  //Navigator.of(context).push(LoginView());
-                },
-                child: Text("login pro max 21"))
-          ],
+      body: SizedBox(
+        child: Center(
+          child: Column(
+            children: [
+              const Text('Programador de reuniones'),
+              ElevatedButton(
+                  onPressed: () {
+                    context.pushNamed('login');
+                  },
+                  child: const Text("login pro max 21"))
+            ],
+          ),
         ),
       ),
     );
