@@ -1,16 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:programador_reuniones_flutter/views/login_view.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:programador_reuniones_flutter/views/principal.dart';
 
 void main() async {
-	WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}) ;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorSchemeSeed: Colors.deepPurple,
       ),
-      home: const Principal(),
+      home: const LoginView(),
     );
   }
 }
