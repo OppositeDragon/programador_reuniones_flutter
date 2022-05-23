@@ -22,7 +22,7 @@ class LoginView extends StatelessWidget {
             ElevatedButton(
               child: const Text('Login'),
               onPressed: () {
-                context.pushNamed('pricipal');
+                context.pushNamed('dashboard');
               },
             ),
           ],
