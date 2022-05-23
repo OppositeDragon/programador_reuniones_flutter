@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () => GoRouter.of(context).go('/'),
+                      onPressed: () => GoRouter.of(context).go('/dashboard'),
                       child: Text(isLogin ? 'Iniciar sesion' : 'Crear cuenta'),
                     ),
                     const SizedBox(height: 24),
