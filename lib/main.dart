@@ -57,8 +57,6 @@ class MyApp extends ConsumerWidget {
       routerDelegate: router.routerDelegate,
       title: 'Programador de reuniones',
       theme: ref.watch(themeProvider).themeData,
-      home: const Principal(),
-
     );
   }
 }
