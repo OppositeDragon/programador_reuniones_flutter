@@ -5,8 +5,9 @@ class Principal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    return  Scaffold(
+			appBar: AppBar(actions: [IconButton(onPressed: (){}, icon: const Icon(Icons.settings))]),
+      body:const Center(
         child: Text('Programador de reuniones'),
       ),
     );
