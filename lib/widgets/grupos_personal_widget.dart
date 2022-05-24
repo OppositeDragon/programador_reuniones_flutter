@@ -9,8 +9,17 @@ class GruposPersonal extends ConsumerStatefulWidget {
 }
 
 class _GruposPersonalState extends ConsumerState<GruposPersonal> {
+  late List<String> items = ["1", "2", "3", "4", "5"];
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: const Text("Mis grupos"));
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(items[index]),
+        );
+      },
+    );
   }
 }
