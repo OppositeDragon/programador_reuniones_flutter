@@ -4,17 +4,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
+import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLogin = true;
@@ -44,6 +47,7 @@ class _LoginViewState extends State<LoginView> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    const SizedBox(height: 32),
                     Text(
                       isLogin ? 'Iniciar Sesion' : 'Crear cuenta',
                       style: Theme.of(context).textTheme.headline4,
@@ -104,8 +108,18 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     const SizedBox(height: 24),
                     ElevatedButton(
-                      onPressed: () => GoRouter.of(context).go('/'),
-                      child: Text(isLogin ? 'Iniciar sesion' : 'Crear cuenta'),
+                      onPressed: () async {
+                        if (isLogin) {
+                          await ref.read(loginProvider).loginEmailPassword('aa@aa.com', '123456');
+                        } else {
+                          final UserCredential authResult = await ref.read(loginProvider).createEmailPassword('email@email.com', 'password');
+                          await ref.read(userProvider).putUserData(authResult, 'email','usuario', 'telefono', 'nombre', 'apellido');
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(isLogin ? 'Iniciar sesion' : 'Crear cuenta'),
+                      ),
                     ),
                     const SizedBox(height: 24),
                     TextButton(
@@ -131,97 +145,59 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Divider(),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(66, 134, 245, 1)),
-                      onPressed: () async {
-                        if (kIsWeb) {
-                          GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-                          // Once signed in, return the UserCredential
-                          final a = await FirebaseAuth.instance.signInWithPopup(googleProvider);
-                          print(a);
-                        } else {
-                          // Trigger the authentication flow
-                          final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-                          // Obtain the auth details from the request
-                          final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-                          // Create a new credential
-                          final credential = GoogleAuthProvider.credential(
-                            accessToken: googleAuth?.accessToken,
-                            idToken: googleAuth?.idToken,
-                          );
-
-                          // Once signed in, return the UserCredential
-                          final a = await FirebaseAuth.instance.signInWithCredential(credential);
-                          print(a);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4),
+                    if (isLogin) const Divider(),
+                    if (isLogin) const SizedBox(height: 8),
+                    if (isLogin)
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(66, 134, 245, 1)),
+                        onPressed: () async {
+                          await ref.read(loginProvider).loginGoogle();
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              height: 56,
+                              width: 56,
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.all(12),
+                              child: Image.asset('assets/search.png'),
                             ),
-                            height: 56,
-                            width: 56,
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            padding: const EdgeInsets.all(12),
-                            child: Image.asset('assets/search.png'),
-                          ),
-                          const Expanded(
-                            child: Text('Continuar con Google', textAlign: TextAlign.center),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(71, 89, 147, 1)),
-                      onPressed: () async {
-                        if (kIsWeb) {
-                          FacebookAuthProvider facebookProvider = FacebookAuthProvider()
-                            ..addScope('email')
-                            ..addScope('public_profile')
-                            ..setCustomParameters({
-                              'display': 'popup',
-                            }); // Once signed in, return the UserCredential
-                          final a = await FirebaseAuth.instance.signInWithPopup(facebookProvider);
-                          print(a);
-                        } else {
-                          // Trigger the sign-in flow
-                          final LoginResult loginResult = await FacebookAuth.instance.login();
-
-                          // Create a credential from the access token
-                          final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-                          // Once signed in, return the UserCredential
-                          final a = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-                          print(a);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4),
+                            const Expanded(
+                              child: Text('Continuar con Google', textAlign: TextAlign.center),
                             ),
-                            height: 56,
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            padding: const EdgeInsets.all(12),
-                            child: Image.asset('assets/facebook.png'),
-                          ),
-                          const Expanded(
-                            child: Text('Continuar con Facebook', textAlign: TextAlign.center),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                    if (isLogin) const SizedBox(height: 16),
+                    if (isLogin)
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(71, 89, 147, 1)),
+                        onPressed: () async {
+                          await ref.read(loginProvider).loginFacebook();
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              height: 56,
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.all(12),
+                              child: Image.asset('assets/facebook.png'),
+                            ),
+                            const Expanded(
+                              child: Text('Continuar con Facebook', textAlign: TextAlign.center),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
