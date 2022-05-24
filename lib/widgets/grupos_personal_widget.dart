@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:getwidget/getwidget.dart';
 
 class GruposPersonal extends ConsumerStatefulWidget {
   const GruposPersonal({super.key});
@@ -16,9 +17,11 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(items[index]),
-        );
+        return const GFListTile(
+            avatar: GFAvatar(),
+            titleText: 'GetWidget Library',
+            subTitleText: 'This is a open source UI library.',
+            icon: Icon(Icons.favorite, color: Colors.red));
       },
     );
   }
