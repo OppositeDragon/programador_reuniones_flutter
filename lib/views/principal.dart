@@ -26,6 +26,12 @@ class Principal extends StatelessWidget {
                     context.pushNamed('profileView');
                   },
                   child: const Text("profile view")),
+              const Text('group detail'),
+              ElevatedButton(
+                  onPressed: () {
+                    context.pushNamed('groupDetail');
+                  },
+                  child: const Text("group detail")),
             ],
           ),
         ),
