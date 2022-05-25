@@ -20,9 +20,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
   bool _showPassword = false;
 
   String _password = '';
-  String _password2 = ' ';
+  String _password2 = '';
   String _email = '';
-  final String _user = '';
+  String _user = '';
   String _phone = '';
   String _name = '';
   String _lastName = '';
@@ -90,7 +90,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             },
                             decoration: const InputDecoration(labelText: "Nombre de usuario", border: OutlineInputBorder()),
                             onSaved: (value) {
-                              _phone = value!.trim();
+                              _user = value!.trim();
                             },
                           ),
                         if (!isLogin) const SizedBox(height: 24),
@@ -160,9 +160,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   },
                                   decoration: const InputDecoration(labelText: 'Confirmar clave', border: OutlineInputBorder()),
                                   obscureText: !_showPassword,
-                                  onSaved: (value) {
-                                    _password2 = value!.trim();
-                                  },
+                                 
                                 ),
                               ),
                           ],
@@ -285,9 +283,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
         final UserCredential authResult = await ref.read(loginProvider).createEmailPassword(_email, _password);
         await ref.read(userProvider).putUserData(authResult, _email, _user, _phone, _name, _lastName);
       }
-      // if (FirebaseAuth.instance.currentUser != null) {
-      //   context.goNamed('principal');
-      // }
     }
   }
 }
