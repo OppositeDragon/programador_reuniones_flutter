@@ -13,17 +13,23 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return const Card(
-          child: ListTile(
-            leading: CircleAvatar(),
-            title: Text('One-line with both widgets'),
-            trailing: Icon(Icons.more_vert),
-          ),
-        );
-      },
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 550),
+        child: ListView.separated(
+          itemCount: items.length,
+          separatorBuilder: (context, index) => const Divider(),
+          itemBuilder: (context, index) {
+            return const ListTile(
+              leading: CircleAvatar(),
+              title: Text('One-line with both widgets'),
+              subtitle: Text('ezta es la descripcion'),
+              trailing: Icon(Icons.more_vert),
+            );
+          },
+        ),
+      ),
     );
   }
 }
