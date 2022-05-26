@@ -16,7 +16,7 @@ class _GroupDetailState extends State<GroupDetail> {
         ),
         body: Column(children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               color: const Color.fromARGB(255, 185, 194, 215),
               child: InkWell(
@@ -52,11 +52,8 @@ class _GroupDetailState extends State<GroupDetail> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               color: const Color.fromARGB(255, 185, 194, 215),
               child: Padding(
@@ -75,7 +72,7 @@ class _GroupDetailState extends State<GroupDetail> {
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Column(
                             children: const <Widget>[
                               Text("Jean Jativa"),
