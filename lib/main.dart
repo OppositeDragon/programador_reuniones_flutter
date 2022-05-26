@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:programador_reuniones_flutter/views/principal.dart';
 
 void main() async {
+	GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ProviderScope(child: const MyApp()));
@@ -21,11 +22,10 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(
-      urlPathStrategy: UrlPathStrategy.path,
       routes: [
         GoRoute(
-          path: '/profileView',
-          name: 'profileView',
+          path: '/profile',
+          name: 'profile',
           pageBuilder: (BuildContext context, GoRouterState state) =>
               MaterialPage<void>(
             key: state.pageKey,
