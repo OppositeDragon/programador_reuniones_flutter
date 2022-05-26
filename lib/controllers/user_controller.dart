@@ -8,13 +8,33 @@ final userProvider = ChangeNotifierProvider<UserController>((ref) {
 });
 
 class UserController with ChangeNotifier {
-  Future<void> putUserData(UserCredential authResult, String email, String usuario, String telefono, String nombre,String apellido) async {
-    FirebaseFirestore.instance.collection('users').doc(authResult.user!.uid).set({
+  Map<String, dynamic>? _userData;
+  Map<String, dynamic>? get userData => _userData;
+
+  Future<void> putUserData(UserCredential authResult, String email,
+      String usuario, String telefono, String nombre, String apellido) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(authResult.user!.uid)
+        .set({
       'email': email,
       'usuario': usuario,
       'telefono': telefono,
       'nombre': nombre,
       'apellido': apellido,
     });
+  }
+
+  Future<void> getUserData() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      print('user is null');
+    } else {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final snapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      _userData = snapshot.data() as Map<String, dynamic>;
+      print(_userData);
+    }
+    notifyListeners();
   }
 }
