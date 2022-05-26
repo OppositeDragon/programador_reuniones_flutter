@@ -28,6 +28,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider).userData;
     final Color iconColor = Theme.of(context).colorScheme.inversePrimary;
+
     return SafeArea(
       child: Scaffold(
         appBar: const AppBarWidget('Perfil'),
@@ -51,10 +52,16 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                       children: <Widget>[
                                         ClipRRect(
                                           borderRadius: BorderRadius.circular(50.0),
-                                          child: Image.asset(
-                                            'assets/avatar.png',
-                                            height: 150,
-                                          ),
+                                          child: userData['photoURL'] == null
+                                              ? Icon(
+                                                  Icons.account_circle_outlined,
+                                                  size: 120,
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                )
+                                              : Image.network(
+                                                  userData['photoURL'],
+                                                  height: 150,
+                                                ),
                                         ),
                                         const SizedBox(height: 20),
                                         Padding(
@@ -91,17 +98,18 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.phone_android, color: iconColor),
-                                              const SizedBox(width: 12),
-                                              Text(userData['telefono'].toString(), style: const TextStyle(fontSize: 20)),
-                                            ],
+                                        if (userData['telefono'] != null)
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Icon(Icons.phone_android, color: iconColor),
+                                                const SizedBox(width: 12),
+                                                Text(userData['telefono'].toString(), style: const TextStyle(fontSize: 20)),
+                                              ],
+                                            ),
                                           ),
-                                        ),
                                         const SizedBox(height: 20),
                                         updateDataButton(),
                                       ],
