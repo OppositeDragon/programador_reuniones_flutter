@@ -16,7 +16,6 @@ import 'package:programador_reuniones_flutter/views/principal.dart';
 void main() async {
   GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   WidgetsFlutterBinding.ensureInitialized();
-  GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (kIsWeb) {
     await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
@@ -24,13 +23,8 @@ void main() async {
   }
   runApp(const ProviderScope(child: MyApp()));
 }
-
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = GoRouter(
+final routerProvider = Provider<GoRouter>((ref) {
+	return  GoRouter(
       routes: [
         GoRoute(
           path: '/login',
@@ -74,17 +68,24 @@ class MyApp extends ConsumerWidget {
         // if the user is logged in but still on the login page, send them to
         // the home page
         if (loggingIn) return '/';
-
         // no need to redirect at all
         return null;
       },
     );
+    
+});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      routeInformationParser: ref.read(routerProvider).routeInformationParser,
+      routerDelegate: ref.read(routerProvider).routerDelegate,
       title: 'Programador de reuniones',
       theme: ref.watch(themeProvider).themeData,
     );
   }
+	
 }

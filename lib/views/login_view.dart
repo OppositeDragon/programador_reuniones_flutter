@@ -19,7 +19,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   }
 
   bool _isEditing = false;
-
   String _email = '';
   String _user = '';
   String _phone = '';
