@@ -18,7 +18,7 @@ class _GroupDetailState extends State<GroupDetail> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Card(
-              color: const Color.fromARGB(255, 185, 194, 215),
+              color: const Color.fromARGB(255, 215, 219, 229),
               child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
@@ -55,13 +55,13 @@ class _GroupDetailState extends State<GroupDetail> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Card(
-              color: const Color.fromARGB(255, 185, 194, 215),
+              color: const Color.fromARGB(255, 215, 219, 229),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: <Widget>[
                     const Card(
-                      color: Color.fromARGB(255, 200, 198, 198),
+                      color: Color.fromARGB(255, 217, 212, 223),
                       child: Center(
                         child: Padding(
                           padding: EdgeInsets.all(10.0),
@@ -69,27 +69,30 @@ class _GroupDetailState extends State<GroupDetail> {
                         ),
                       ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
+                    Card(
+                      color: const Color.fromARGB(255, 212, 212, 223),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              children: const <Widget>[
+                                Text("Jean Jativa"),
+                                Text("Lenin Acosta")
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Column(
                             children: const <Widget>[
-                              Text("Jean Jativa"),
-                              Text("Lenin Acosta")
+                              Text("Steven Lopez"),
+                              Text("Erick Carrasco")
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Column(
-                          children: const <Widget>[
-                            Text("Steven Lopez"),
-                            Text("Erick Carrasco")
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
