@@ -55,42 +55,59 @@ class _GroupDetailState extends State<GroupDetail> {
           const SizedBox(
             height: 20,
           ),
-          Card(
-            child: Column(
-              children: <Widget>[
-                const Card(
-                  child: Center(
-                    child: Text("integrantes"),
-                  ),
-                ),
-                Row(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Card(
+              color: const Color.fromARGB(255, 185, 194, 215),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
                   children: <Widget>[
-                    Column(
-                      children: const <Widget>[
-                        Text("Jean Jativa"),
-                        Text("Lenin Acosta")
-                      ],
+                    const Card(
+                      color: Color.fromARGB(255, 200, 198, 198),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text("integrantes"),
+                        ),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Column(
-                      children: const <Widget>[
-                        Text("Steven Lopez"),
-                        Text("Erick Carrasco")
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            children: const <Widget>[
+                              Text("Jean Jativa"),
+                              Text("Lenin Acosta")
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          children: const <Widget>[
+                            Text("Steven Lopez"),
+                            Text("Erick Carrasco")
+                          ],
+                        ),
                       ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          const Card(
-            child: Text("aqui va el horario calculado"),
-          ),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Card(
+              child: Text("aqui va el horario calculado"),
+            ),
+          )
         ]));
   }
 }
