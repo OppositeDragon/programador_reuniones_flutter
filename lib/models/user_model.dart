@@ -3,17 +3,17 @@ import 'dart:convert';
 class UserModel {
   String userId;
   String email;
-  String usuario;
-  String telefono;
-  String nombre;
-  String apellido;
+  String user;
+  String phone;
+  String name;
+  String lastName;
   UserModel(
     this.userId,
     this.email,
-    this.usuario,
-    this.telefono,
-    this.nombre,
-    this.apellido,
+    this.user,
+    this.phone,
+    this.name,
+    this.lastName,
   );
 
   UserModel copyWith({
@@ -27,10 +27,10 @@ class UserModel {
     return UserModel(
       userId ?? this.userId,
       email ?? this.email,
-      usuario ?? this.usuario,
-      telefono ?? this.telefono,
-      nombre ?? this.nombre,
-      apellido ?? this.apellido,
+      usuario ?? this.user,
+      telefono ?? this.phone,
+      nombre ?? this.name,
+      apellido ?? this.lastName,
     );
   }
 
@@ -39,10 +39,10 @@ class UserModel {
 
     result.addAll({'userId': userId});
     result.addAll({'email': email});
-    result.addAll({'usuario': usuario});
-    result.addAll({'telefono': telefono});
-    result.addAll({'nombre': nombre});
-    result.addAll({'apellido': apellido});
+    result.addAll({'usuario': user});
+    result.addAll({'telefono': phone});
+    result.addAll({'nombre': name});
+    result.addAll({'apellido': lastName});
 
     return result;
   }
@@ -65,7 +65,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, email: $email, usuario: $usuario, telefono: $telefono, nombre: $nombre, apellido: $apellido)';
+    return 'UserModel(userId: $userId, email: $email, usuario: $user, telefono: $phone, nombre: $name, apellido: $lastName)';
   }
 
   @override
@@ -75,19 +75,19 @@ class UserModel {
     return other is UserModel &&
         other.userId == userId &&
         other.email == email &&
-        other.usuario == usuario &&
-        other.telefono == telefono &&
-        other.nombre == nombre &&
-        other.apellido == apellido;
+        other.user == user &&
+        other.phone == phone &&
+        other.name == name &&
+        other.lastName == lastName;
   }
 
   @override
   int get hashCode {
     return userId.hashCode ^
         email.hashCode ^
-        usuario.hashCode ^
-        telefono.hashCode ^
-        nombre.hashCode ^
-        apellido.hashCode;
+        user.hashCode ^
+        phone.hashCode ^
+        name.hashCode ^
+        lastName.hashCode;
   }
 }
