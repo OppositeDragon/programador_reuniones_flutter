@@ -15,23 +15,41 @@ class _GroupDetailState extends State<GroupDetail> {
           title: const Text("Detalle del grupo"),
         ),
         body: Column(children: <Widget>[
-          Card(
-            child: Row(
-              children: <Widget>[
-                Row(
-                  children: const <Widget>[
-                    Image(
-                      image: NetworkImage(
-                          "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg"),
-                      height: 50,
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Card(
+              color: const Color.fromARGB(255, 185, 194, 215),
+              child: InkWell(
+                splashColor: Colors.blue.withAlpha(30),
+                onTap: () {
+                  debugPrint('Card tapped.');
+                },
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: SizedBox(
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: const Image(
+                                  image: NetworkImage(
+                                      "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg"),
+                                  height: 70,
+                                ),
+                              ),
+                            ),
+                            const Text("DAS - GRUPO1 GROUPMEET"),
+                          ],
+                        ),
+                      ),
                     ),
-                    Text("Grupo de estudio 1 - desarrollod asistido")
                   ],
                 ),
-                Row(
-                  children: const <Widget>[Text("asdasd")],
-                ),
-              ],
+              ),
             ),
           ),
           const SizedBox(
