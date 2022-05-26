@@ -9,13 +9,12 @@ final themeProvider = ChangeNotifierProvider<ThemeController>((ref) {
 class ThemeController with ChangeNotifier {
   final ThemeData _lightThemeData = ThemeData(colorScheme: lightColorScheme);
   final ThemeData _darkThemeData = ThemeData(colorScheme: darkColorScheme);
-  ThemeData _themeData = ThemeData(colorScheme: lightColorScheme);
 
-  ThemeData get themeData => _themeData;
-  bool _isDark = true;
-  setTheme() {
-    _themeData = _isDark ? _darkThemeData : _lightThemeData;
-    _isDark = !_isDark;
+  ThemeData get themeData => _isDark ? _darkThemeData : _lightThemeData;
+  bool _isDark = false;
+	bool get isDark => _isDark;
+  setTheme(bool value) {
+    _isDark = value;
     notifyListeners();
   }
 }

@@ -32,16 +32,9 @@ class MyApp extends ConsumerWidget {
     final router = GoRouter(
       // initialLocation: '/login',
       routes: [
+       
         GoRoute(
           path: '/',
-          name: 'principal',
-          pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-            key: state.pageKey,
-            child: const Principal(),
-          ),
-        ),
-        GoRoute(
-          path: '/dashboard',
           name: 'dashboard',
           pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
             key: state.pageKey,
