@@ -20,7 +20,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   bool _showPassword = false;
 
   String _password = '';
-  String _password2 = '';
   String _email = '';
   String _user = '';
   String _phone = '';
