@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
-import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
@@ -65,7 +64,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             children: [
                                               Icon(Icons.abc, color: iconColor),
                                               const SizedBox(width: 12),
-                                              Text(userData['usuario'].toString(), style: TextStyle(fontSize: 20)),
+                                              Text(userData['usuario'].toString(), style: const TextStyle(fontSize: 20)),
                                             ],
                                           ),
                                         ),
@@ -76,7 +75,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             children: [
                                               Icon(Icons.email, color: iconColor),
                                               const SizedBox(width: 12),
-                                              Text(userData['email'].toString(), style: TextStyle(fontSize: 20)),
+                                              Text(userData['email'].toString(), style: const TextStyle(fontSize: 20)),
                                             ],
                                           ),
                                         ),
@@ -88,7 +87,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                               Icon(Icons.person, color: iconColor),
                                               const SizedBox(width: 12),
                                               Text("${userData['nombre'].toString()} ${userData['apellido'].toString()}",
-                                                  style: TextStyle(fontSize: 20)),
+                                                  style: const TextStyle(fontSize: 20)),
                                             ],
                                           ),
                                         ),
@@ -99,7 +98,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             children: [
                                               Icon(Icons.phone_android, color: iconColor),
                                               const SizedBox(width: 12),
-                                              Text(userData['telefono'].toString(), style: TextStyle(fontSize: 20)),
+                                              Text(userData['telefono'].toString(), style: const TextStyle(fontSize: 20)),
                                             ],
                                           ),
                                         ),
