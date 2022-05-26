@@ -34,15 +34,17 @@ class _PopUpMenuState extends ConsumerState<PopUpMenu> {
   //bool isDark = false;
   @override
   Widget build(BuildContext context) {
-		bool isDark = ref.watch(themeProvider).isDark;
+    bool isDark = ref.watch(themeProvider).isDark;
     return PopupMenuButton(
+			
       // Callback that sets the selected popup menu item.
 
       itemBuilder: (BuildContext context) {
-        return [upMenuItem(
+        return [
+          PopupMenuItem(
             child: ListTile(
                 title: const Text('Tema'),
-                trailing: isDark? const Icon(Icons.interests) :const Icon(Icons.sunny),
+                trailing: isDark ? const Icon(Icons.interests) : const Icon(Icons.sunny),
                 onTap: () {
                   isDark = !isDark;
                   ref.read(themeProvider).setTheme(isDark);

@@ -44,7 +44,7 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const AppBarWidget('Dashboard'),
-      body: size.width > 900
+      body: size.width > 1000
           ? Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: size.height - 156),
@@ -96,7 +96,7 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
                       fit: FlexFit.tight,
                       child: Card(
                           child: AspectRatio(
-                        aspectRatio: 0.8,
+                        aspectRatio:1,
                         child: HorasTrabajoWidget(),
                       )),
                     ),
@@ -105,7 +105,7 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
                       fit: FlexFit.tight,
                       child: Card(
                           child: AspectRatio(
-                        aspectRatio: 0.8,
+                        aspectRatio: 1,
                         child: GruposPersonal(),
                       )),
                     ),
