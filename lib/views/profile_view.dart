@@ -1,93 +1,222 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 
-class ProfileView extends StatefulWidget {
+class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  ConsumerState<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _ProfileViewState extends ConsumerState<ProfileView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isEditing = false;
+
+  String _email = '';
+  String _user = '';
+  String _phone = '';
+  String _name = '';
+  String _lastName = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final Color iconColor = Theme.of(context).colorScheme.inversePrimary;
+    return SafeArea(
+      child: Scaffold(
         appBar: AppBar(
-          title: const Text("Perfil"),
-        ),
+            title: const Text('Perfil'),
+            actions: [
+              IconButton(
+                onPressed: () => ref.read(themeProvider).setTheme(),
+                icon: const Icon(Icons.settings),
+              ),
+            ],
+            elevation: 1),
         body: Center(
           child: SingleChildScrollView(
-            child: AnimatedContainer(
-              padding: const EdgeInsets.all(24),
-              //	color: Colors.yellow,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                //color: Colors.grey.shade200
-              ),
-              constraints: const BoxConstraints(maxWidth: 500),
-              duration: const Duration(milliseconds: 2000),
-              child: Center(
-                child: Form(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(50.0),
-                      child: Image.network(
-                        "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
-                        height: 150,
-                      ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Center(
+                      child: !_isEditing
+                          ? Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: Image.asset(
+                                      'assets/avatar.png',
+                                      height: 150,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.abc, color: iconColor),
+                                        const SizedBox(width: 12),
+                                        const Text('usuario', style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.email, color: iconColor),
+                                        const SizedBox(width: 12),
+                                        const Text('aoeaoe@aoeae.com', style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.person, color: iconColor),
+                                        const SizedBox(width: 12),
+                                        const Text('Nombre Persona', style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.phone_android, color: iconColor),
+                                        const SizedBox(width: 12),
+                                        const Text('099784575', style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  updateDataButton(),
+                                ],
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                /*user */ TextFormField(
+                                  key: const ValueKey('Nombre de usuario'),
+                                  validator: (value) {
+                                    if (value!.isEmpty || value.length < 4) {
+                                      return 'Debe tener al menos 4 caracteres';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(labelText: "Nombre de usuario", border: OutlineInputBorder()),
+                                  onSaved: (value) {
+                                    _user = value!.trim();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                /*email */ TextFormField(
+                                  key: const ValueKey('email'),
+                                  decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+                                  validator: (value) {
+                                    if (value!.isEmpty || !value.contains('@') || value.length < 5) {
+                                      return 'Debe ingresar un correo electronico valido.';
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.emailAddress,
+                                  onSaved: (value) {
+                                    _email = value!.trim();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Flexible(
+                                      child: TextFormField(
+                                        key: const ValueKey('name'),
+                                        validator: (value) {
+                                          if (value!.isEmpty || value.length < 2) {
+                                            return 'Debe tener al menos 2 caracteres';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: const InputDecoration(labelText: "Nombre", border: OutlineInputBorder()),
+                                        onSaved: (value) {
+                                          _name = value!.trim();
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Flexible(
+                                      child: /*lastName*/ TextFormField(
+                                        key: const ValueKey('lastName'),
+                                        validator: (value) {
+                                          if (value!.isEmpty || value.length < 2) {
+                                            return 'Debe tener al menos 2 caracteres';
+                                          }
+                                          return null;
+                                        },
+                                        decoration: const InputDecoration(labelText: "Apellido", border: OutlineInputBorder()),
+                                        onSaved: (value) {
+                                          _lastName = value!.trim();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                /*phone */ TextFormField(
+                                  key: const ValueKey('phone'),
+                                  keyboardType: TextInputType.phone,
+                                  validator: (value) {
+                                    if (value!.isEmpty || value.length < 6) {
+                                      return 'Debe tener al menos 6 numeros';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: const InputDecoration(labelText: "Numero de telefono", border: OutlineInputBorder()),
+                                  onSaved: (value) {
+                                    _phone = value!.trim();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                updateDataButton(),
+                              ],
+                            ),
                     ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Usuario",
-                        border: OutlineInputBorder(),
-                        hintText: "NobMaster69",
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Telfono",
-                        border: OutlineInputBorder(),
-                        hintText: "0927592640",
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Nombre",
-                          hintText: "Julian",
-                          border: OutlineInputBorder()),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Apellido",
-                          hintText: "Julian",
-                          border: OutlineInputBorder()),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Contrasenia",
-                          hintText: "***********",
-                          border: OutlineInputBorder()),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => GoRouter.of(context).go('/'),
-                      child: const Text("Actualizar mis datos"),
-                    )
-                  ],
-                )),
+                  ),
+                ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  ElevatedButton updateDataButton() {
+    return ElevatedButton(
+      onPressed: () {
+        _isEditing ? _updateData() : switchIsEditingState();
+      },
+      child: Text(_isEditing ? "Actualizar datos" : 'Editar datos'),
+    );
+  }
+
+  void switchIsEditingState() {
+    return setState(() {
+      _isEditing = !_isEditing;
+    });
+  }
+
+  _updateData() {
+    switchIsEditingState();
   }
 }
