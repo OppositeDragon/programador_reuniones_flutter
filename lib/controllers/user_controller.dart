@@ -28,19 +28,19 @@ class UserController with ChangeNotifier {
     } else {
       switch (FirebaseAuth.instance.currentUser?.providerData.first.providerId) {
         case 'facebook.com':
-        //  final facebookData = await FacebookAuth.instance.getUserData();
+          final facebookData = await FacebookAuth.instance.getUserData();
           final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
           Map<String, dynamic> userInfoMap = {
             'email': userInfo?.email,
             'nombre': userInfo?.displayName,
             'apellido': '',
-            //'photoURL': facebookData["picture"]["url"],
+            'photoURL': facebookData==null?null:facebookData["picture"]["data"]["url"],
             'telefono': userInfo?.phoneNumber,
             'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
-						'provider':'facebook'
+            'provider': 'facebook'
           };
           _userData = userInfoMap;
-					break;
+          break;
         case 'google.com':
           final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
           Map<String, dynamic> userInfoMap = {
@@ -49,7 +49,8 @@ class UserController with ChangeNotifier {
             'apellido': '',
             'photoURL': userInfo?.photoURL,
             'telefono': userInfo?.phoneNumber,
-            'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),'provider':'google'
+            'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
+            'provider': 'google'
           };
           _userData = userInfoMap;
           break;
@@ -57,7 +58,7 @@ class UserController with ChangeNotifier {
           final uid = FirebaseAuth.instance.currentUser!.uid;
           final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
           _userData = snapshot.data() as Map<String, dynamic>;
-					_userData!['provider'] = 'password';
+          _userData!['provider'] = 'password';
           break;
         default:
       }

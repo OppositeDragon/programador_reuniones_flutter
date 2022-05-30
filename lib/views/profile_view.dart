@@ -82,7 +82,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             children: [
                                               Icon(Icons.email, color: iconColor),
                                               const SizedBox(width: 12),
-                                              Text(userData['email'].toString(), style: const TextStyle(fontSize: 20)),
+                                              Expanded(child: Text(userData['email'].toString(),maxLines: 1,softWrap: false,overflow: TextOverflow.fade, style: const TextStyle(fontSize: 20))),
                                             ],
                                           ),
                                         ),
@@ -111,7 +111,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             ),
                                           ),
                                         const SizedBox(height: 20),
-                                        updateDataButton(),
+                                      if(userData['provider']=='password')  updateDataButton(),
                                       ],
                                     ),
                                   )
