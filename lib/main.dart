@@ -9,7 +9,6 @@ import 'package:programador_reuniones_flutter/controllers/login_controller.dart'
 import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 import 'package:programador_reuniones_flutter/views/dashboard_view.dart';
 import 'package:programador_reuniones_flutter/views/login_view.dart';
-import 'package:programador_reuniones_flutter/views/principal.dart';
 
 import 'firebase_options.dart';
 
@@ -32,20 +31,13 @@ class MyApp extends ConsumerWidget {
     final router = GoRouter(
       // initialLocation: '/login',
       routes: [
+       
         GoRoute(
           path: '/',
-          name: 'principal',
-          pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-            key: state.pageKey,
-            child: const Principal(),
-          ),
-        ),
-        GoRoute(
-          path: '/dashboard',
           name: 'dashboard',
           pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
             key: state.pageKey,
-            child: const Dashboard(),
+            child: const DashboardView(),
           ),
         ),
         GoRoute(
