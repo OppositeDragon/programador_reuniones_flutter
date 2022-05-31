@@ -21,7 +21,11 @@ class _DashboardState extends State<Dashboard>
     setState(() {
       paginaSeleccionada = index;
     });
-    controller?.jumpToPage(index);
+    controller?.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.bounceIn,
+    );
   }
 
   @override
@@ -44,6 +48,11 @@ class _DashboardState extends State<Dashboard>
       ),
       body: PageView(
         controller: controller,
+        onPageChanged: (page) {
+          setState(() {
+            paginaSeleccionada = page;
+          });
+        },
         children: const [
           HorarioPersonalWidget(),
           HorasTrabajoWidget(),
@@ -54,7 +63,7 @@ class _DashboardState extends State<Dashboard>
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.tab_unselected_sharp),
-            label: "Mis horarios",
+            label: "Mi horario",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.timelapse),

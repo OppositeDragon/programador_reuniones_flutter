@@ -16,6 +16,7 @@ class _PrincipalState extends ConsumerState<Principal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
+        IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
         IconButton(
           onPressed: () => ref.read(themeProvider).setTheme(),
           icon: const Icon(Icons.settings),
@@ -31,6 +32,23 @@ class _PrincipalState extends ConsumerState<Principal> {
             children: [
               const Text('Programador de reuniones'),
               ElevatedButton(
+                  onPressed: () {
+                    context.pushNamed('login');
+                  },
+                  child: const Text("login pro max 21")),
+              const Text('profile view'),
+              ElevatedButton(
+                  onPressed: () {
+                    context.pushNamed('profileView');
+                  },
+                  child: const Text("profile view")),
+              const Text('group detail'),
+              ElevatedButton(
+                  onPressed: () {
+                    context.pushNamed('groupDetail');
+                  },
+                  child: const Text("group detail")),
+
                 onPressed: () => context.goNamed('login'),
                 child: const Text("login pro max 21"),
               ),
