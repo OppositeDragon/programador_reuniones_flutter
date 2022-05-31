@@ -10,11 +10,18 @@ class ThemeController with ChangeNotifier {
   final ThemeData _lightThemeData = ThemeData(colorScheme: lightColorScheme);
   final ThemeData _darkThemeData = ThemeData(colorScheme: darkColorScheme);
 
-  ThemeData get themeData => _isDark ? _darkThemeData : _lightThemeData;
-  bool _isDark = false;
-	bool get isDark => _isDark;
+  ThemeData get themeData => _themeData;
+  ThemeData _themeData = ThemeData(colorScheme: lightColorScheme);
+
+  bool get isDark => _themeData == ThemeData(colorScheme: darkColorScheme);
+
   setTheme(bool value) {
-    _isDark = value;
+    if (_themeData == ThemeData(colorScheme: darkColorScheme)) {
+      _themeData = _lightThemeData;
+    } else {
+      _themeData = _darkThemeData;
+    }
+
     notifyListeners();
   }
 }

@@ -18,29 +18,6 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
 
 
   @override
-  void initState() {
-    super.initState();
-    controller = PageController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller!.dispose();
-  }
-
-  void _goToPage(int index) {
-    controller?.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-    setState(() {
-      paginaSeleccionada = index;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -152,5 +129,28 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
               onTap: _goToPage,
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller!.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = PageController();
+  }
+
+  void _goToPage(int index) {
+    controller?.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      paginaSeleccionada = index;
+    });
   }
 }

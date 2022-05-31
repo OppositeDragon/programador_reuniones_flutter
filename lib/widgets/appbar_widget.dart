@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
-import 'package:programador_reuniones_flutter/main.dart';
+import 'package:programador_reuniones_flutter/go_router_provider.dart';
 import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 
-class AppBarWidget extends ConsumerWidget implements PreferredSizeWidget {
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget(this.title, {super.key});
   final String title;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
-      actions: [PopUpMenu()],
+      actions: const [PopUpMenu()],
     );
   }
 
@@ -21,35 +21,38 @@ class AppBarWidget extends ConsumerWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class PopUpMenu extends ConsumerStatefulWidget {
-  const PopUpMenu({
-    super.key,
-  });
+class PopUpMenu extends ConsumerWidget {
+  const PopUpMenu({super.key});
 
-  @override
-  ConsumerState<PopUpMenu> createState() => _PopUpMenuState();
-}
-
-class _PopUpMenuState extends ConsumerState<PopUpMenu> {
   //bool isDark = false;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     bool isDark = ref.watch(themeProvider).isDark;
+
     return PopupMenuButton(
-			
       // Callback that sets the selected popup menu item.
 
       itemBuilder: (BuildContext context) {
         return [
-          PopupMenuItem(
-            child: ListTile(
-                title: const Text('Tema'),
-                trailing: isDark ? const Icon(Icons.interests) : const Icon(Icons.sunny),
+          if (ref.watch(routerProvider).location != '/perfil')
+            PopupMenuItem(
+              child: ListTile(
+                title: const Text('Perfil'),
+                trailing: const Icon(Icons.account_circle),
                 onTap: () {
-                  isDark = !isDark;
-                  ref.read(themeProvider).setTheme(isDark);
-                }),
-          ),
+                  context.pushNamed('perfil');
+                },
+              ),
+            ),
+          PopupMenuItem(
+              child: ListTile(
+            title: const Text('Tema'),
+            trailing:const Icon(Icons.brightness_4_sharp),
+            onTap: () {
+              //isDark = !isDark;
+              ref.read(themeProvider).setTheme(isDark);
+            },
+          )),
           PopupMenuItem(
             child: ListTile(
               title: const Text('Cerrar sesion'),
