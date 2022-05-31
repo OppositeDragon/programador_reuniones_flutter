@@ -51,23 +51,42 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                 },
               ),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   final resultado =
-                      showSearch(context: context, delegate: Busqueda());
-                  integrantes.add(resultado);
+                      await showSearch(context: context, delegate: Busqueda());
+                  if (resultado != "") {
+                    setState(() {
+                      integrantes.add(resultado);
+                    });
+                  }
                 },
                 icon: const Icon(Icons.search),
               ),
-              const Spacer(),
+              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: integrantes.length,
                   itemBuilder: (context, index) {
                     final sugerencia = integrantes[index];
-                    return ListTile(
-                      leading: const Icon(Icons.tab_unselected_rounded),
-                      title: Text(sugerencia),
-                      onTap: () {},
+                    return Dismissible(
+                      key: Key(sugerencia),
+                      background: Container(
+                        color: Color.fromARGB(140, 224, 70, 59),
+                        child: Icon(Icons.delete),
+                        alignment: Alignment.topLeft,
+                      ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          integrantes.removeAt(index);
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('$sugerencia eliminado.')));
+                      },
+                      child: ListTile(
+                        leading: const Icon(Icons.tab_unselected_rounded),
+                        title: Text(sugerencia),
+                        onTap: () {},
+                      ),
                     );
                   },
                 ),
@@ -139,7 +158,7 @@ class Busqueda extends SearchDelegate<String> {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       onPressed: () {
-        context.pop();
+        close(context, "");
       },
       icon: const Icon(Icons.arrow_back),
     );
