@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +18,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
   bool _showPassword = false;
 
   String _password = '';
-  String _password2 = '';
   String _email = '';
   String _user = '';
   String _phone = '';
@@ -160,7 +157,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   },
                                   decoration: const InputDecoration(labelText: 'Confirmar clave', border: OutlineInputBorder()),
                                   obscureText: !_showPassword,
-                                 
                                 ),
                               ),
                           ],
