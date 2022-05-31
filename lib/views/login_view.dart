@@ -4,14 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 
-class LoginView extends ConsumerStatefulWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _LoginViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends ConsumerState<LoginView> {
+class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLogin = true;
@@ -23,11 +23,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
   String _phone = '';
   String _name = '';
   String _lastName = '';
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
+
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 450),
