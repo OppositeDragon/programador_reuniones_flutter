@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 
 final userProvider = ChangeNotifierProvider<UserController>((ref) {
   return UserController();
@@ -34,7 +35,7 @@ class UserController with ChangeNotifier {
             'email': userInfo?.email,
             'nombre': userInfo?.displayName,
             'apellido': '',
-            'photoURL': facebookData==null?null:facebookData["picture"]["data"]["url"],
+            'photoURL': facebookData == null ? null : facebookData["picture"]["data"]["url"],
             'telefono': userInfo?.phoneNumber,
             'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
             'provider': 'facebook'
@@ -67,4 +68,28 @@ class UserController with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  editUserEmail(String email, String password) async {
+    await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(EmailAuthProvider.credential(email: email, password: password));
+    await FirebaseAuth.instance.currentUser?.updateEmail(email);
+  }
+  
+	Future<void> editUserData(String email, String user, String phone, String name, String lastName) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'email': email,
+      'usuario': user,
+      'telefono': phone,
+      'nombre': name,
+      'apellido': lastName,
+    }, SetOptions(merge: true));
+  }
+String _password = '';
+String get password=>_password;
+
+
+  void setPassword(String value) {_password = value;
+		notifyListeners();}
+	
 }
