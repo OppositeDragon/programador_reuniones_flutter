@@ -27,17 +27,20 @@ class LoginController with ChangeNotifier {
     return authResult;
   }
 
-  Future<void> loginEmailPassword(String email, String password) async {
+  Future<UserCredential?> loginEmailPassword(String email, String password) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      final authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      return authResult;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
+    return null;
   }
 
   Future<void> loginGoogle() async {
@@ -66,24 +69,12 @@ class LoginController with ChangeNotifier {
   }
 
   Future<void> loginFacebook() async {
-    if (kIsWeb) {
-      FacebookAuthProvider facebookProvider = FacebookAuthProvider()
-        ..addScope('email')
-        ..addScope('public_profile')
-        ..setCustomParameters({
-          'display': 'popup',
-        }); // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithPopup(facebookProvider);
-    } else {
-      // Trigger the sign-in flow
-      final LoginResult loginResult = await FacebookAuth.instance.login();
-
-      // Create a credential from the access token
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-      // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    }
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
     notifyListeners();
   }
 

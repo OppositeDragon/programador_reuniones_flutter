@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userProvider = ChangeNotifierProvider<UserController>((ref) {
+final userProvider = ChangeNotifierProvider.autoDispose<UserController>((ref) {
   return UserController();
 });
 
@@ -28,13 +28,21 @@ class UserController with ChangeNotifier {
     } else {
       switch (FirebaseAuth.instance.currentUser?.providerData.first.providerId) {
         case 'facebook.com':
-          final facebookData = await FacebookAuth.instance.getUserData();
+          Map<String, dynamic>? facebookData = {};
+          try {
+            facebookData = await FacebookAuth.instance.getUserData();
+            print(facebookData);
+            print('facebookPhoto ${facebookData == null ? null : facebookData["picture"]["data"]["url"]}');
+          } catch (e) {
+            facebookData = null;
+          }
+
           final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
           Map<String, dynamic> userInfoMap = {
             'email': userInfo?.email,
             'nombre': userInfo?.displayName,
             'apellido': '',
-            'photoURL': facebookData==null?null:facebookData["picture"]["data"]["url"],
+            'photoURL': facebookData == null ? null : facebookData["picture"]["data"]["url"],
             'telefono': userInfo?.phoneNumber,
             'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
             'provider': 'facebook'
@@ -65,6 +73,24 @@ class UserController with ChangeNotifier {
 
       print(_userData);
     }
+    notifyListeners();
+  }
+
+  Future<void> editUserData(String user, String phone, String name, String lastName) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'usuario': user,
+      'telefono': phone,
+      'nombre': name,
+      'apellido': lastName,
+    }, SetOptions(merge: true));
+  }
+
+  String _password = '';
+  String get password => _password;
+
+  void setPassword(String value) {
+    _password = value;
     notifyListeners();
   }
 }
