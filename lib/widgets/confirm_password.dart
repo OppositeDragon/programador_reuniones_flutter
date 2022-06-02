@@ -13,9 +13,11 @@ class _ConfirmPasswordWidgetState extends State<ConfirmPasswordWidget> {
   bool _showPassword = false;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Consumer(builder: (context, ref, child) =>TextField(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+      child: Column(
+        children: [
+          Consumer(builder: (context, ref, child) =>TextField(
 						key: const ValueKey('password'),
 						decoration: const InputDecoration(labelText: 'Clave', border: OutlineInputBorder()),
 						obscureText: !_showPassword,
@@ -25,22 +27,23 @@ class _ConfirmPasswordWidgetState extends State<ConfirmPasswordWidget> {
 					),),
 					 
 				
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Checkbox(
-              value: _showPassword,
-              onChanged: (bool? value) {
-                setState(() {
-                  _showPassword = value!;
-                });
-              },
-            ),
-            const Text('Mostrar clave'),
-          ],
-        ),
-        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Aceptar'))
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Checkbox(
+                value: _showPassword,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _showPassword = value!;
+                  });
+                },
+              ),
+              const Text('Mostrar clave'),
+            ],
+          ),
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('Aceptar'))
+        ],
+      ),
     );
   }
 }

@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 
-final userProvider = ChangeNotifierProvider<UserController>((ref) {
+final userProvider = ChangeNotifierProvider.autoDispose<UserController>((ref) {
   return UserController();
 });
 
@@ -29,7 +28,15 @@ class UserController with ChangeNotifier {
     } else {
       switch (FirebaseAuth.instance.currentUser?.providerData.first.providerId) {
         case 'facebook.com':
-          final facebookData = await FacebookAuth.instance.getUserData();
+          Map<String, dynamic>? facebookData = {};
+          try {
+            facebookData = await FacebookAuth.instance.getUserData();
+            print(facebookData);
+            print('facebookPhoto ${facebookData == null ? null : facebookData["picture"]["data"]["url"]}');
+          } catch (e) {
+            facebookData = null;
+          }
+
           final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
           Map<String, dynamic> userInfoMap = {
             'email': userInfo?.email,
@@ -69,27 +76,21 @@ class UserController with ChangeNotifier {
     notifyListeners();
   }
 
-  editUserEmail(String email, String password) async {
-    await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(EmailAuthProvider.credential(email: email, password: password));
-    await FirebaseAuth.instance.currentUser?.updateEmail(email);
-  }
-  
-	Future<void> editUserData(String email, String user, String phone, String name, String lastName) async {
+  Future<void> editUserData(String user, String phone, String name, String lastName) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
-
-    final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'email': email,
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'usuario': user,
       'telefono': phone,
       'nombre': name,
       'apellido': lastName,
     }, SetOptions(merge: true));
   }
-String _password = '';
-String get password=>_password;
 
+  String _password = '';
+  String get password => _password;
 
-  void setPassword(String value) {_password = value;
-		notifyListeners();}
-	
+  void setPassword(String value) {
+    _password = value;
+    notifyListeners();
+  }
 }

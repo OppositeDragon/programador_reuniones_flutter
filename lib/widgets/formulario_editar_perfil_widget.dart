@@ -25,6 +25,8 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
       key: _formKey,
       child: Column(
         children: [
+					const Text('Editar datos',style: TextStyle(fontSize: 25),),
+					const SizedBox(height: 20),
           /*user */ TextFormField(
             initialValue: widget.userData['usuario'].toString(),
             key: const ValueKey('Nombreusuario'),
@@ -39,22 +41,22 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
               _user = value!.trim();
             },
           ),
-          const SizedBox(height: 20),
-          /*email */ TextFormField(
-            initialValue: widget.userData['email'].toString(),
-            key: const ValueKey('email'),
-            decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              if (value!.isEmpty || !value.contains('@') || value.length < 5) {
-                return 'Debe ingresar un correo electronico valido.';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _email = value!.trim();
-            },
-          ),
+          // const SizedBox(height: 20),
+          // /*email */ TextFormField(
+          //   initialValue: widget.userData['email'].toString(),
+          //   key: const ValueKey('email'),
+          //   decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+          //   keyboardType: TextInputType.emailAddress,
+          //   validator: (value) {
+          //     if (value!.isEmpty || !value.contains('@') || value.length < 5) {
+          //       return 'Debe ingresar un correo electronico valido.';
+          //     }
+          //     return null;
+          //   },
+          //   onSaved: (value) {
+          //     _email = value!.trim();
+          //   },
+          // ),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -133,28 +135,16 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState!.save();
-      if (_email == widget.userData['email']) {
-        await ref.read(userProvider).editUserData(_email, _user, _phone, _name, _lastName);
-      } else {
-        await showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                title: const Text('Escriba su contraseña.'),
-                children: [ConfirmPasswordWidget()],
-              );
-            });
-        print('pasword: ${ref.read(userProvider).password}');
-        await ref.read(userProvider).editUserEmail(widget.userData['email'], ref.read(userProvider).password);
-        await ref.read(userProvider).editUserData(_email, _user, _phone, _name, _lastName);
+      await ref.read(userProvider).editUserData(_user, _phone, _name, _lastName);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Datos guardados'),
+          ),
+        );
       }
+      await ref.read(userProvider).getUserData();
+      widget.switchIsEditingState!();
     }
-
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Datos guardados'),
-      ),
-    );
   }
 }
