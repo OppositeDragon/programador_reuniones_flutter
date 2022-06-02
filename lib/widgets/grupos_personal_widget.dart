@@ -10,23 +10,7 @@ class GruposPersonal extends ConsumerStatefulWidget {
 }
 
 class _GruposPersonalState extends ConsumerState<GruposPersonal> {
-  late List<String> items = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15"
-  ];
+  late List<String> items = List.generate(13, (index) => 'Grupo numero${index + 1}');
 
   @override
   Widget build(BuildContext context) {
@@ -40,27 +24,23 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
               itemCount: items.length,
               separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
-                return const ListTile(
-                  leading: CircleAvatar(),
-                  title: Text('One-line with both widgets'),
-                  subtitle: Text('ezta es la descripcion'),
-                  trailing: Icon(Icons.more_vert),
+                return ListTile(
+                  leading: const CircleAvatar(),
+                  title: Text(items[index]),
+                  subtitle: const Text('Descripcion de grupo'),
+                  trailing: const Icon(Icons.arrow_right_sharp),
                 );
               },
-              addSemanticIndexes: true,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15, right: 15),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: ElevatedButton(
+            Positioned(
+                bottom: 20,
+                right: 20,
+                child: FloatingActionButton(
                   onPressed: () {
                     context.pushNamed('nuevoGrupo');
                   },
-                  child: const Text("Nuevo"),
-                ),
-              ),
-            )
+                  child: const Icon(Icons.add),
+                )),
           ],
         ),
       ),
