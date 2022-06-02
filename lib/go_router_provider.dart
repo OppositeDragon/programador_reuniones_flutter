@@ -6,29 +6,13 @@ import 'package:programador_reuniones_flutter/controllers/login_controller.dart'
 import 'package:programador_reuniones_flutter/views/dashboard_view.dart';
 import 'package:programador_reuniones_flutter/views/group_detail.dart';
 import 'package:programador_reuniones_flutter/views/login_view.dart';
+import 'package:programador_reuniones_flutter/views/nuevo_grupo_view.dart';
 import 'package:programador_reuniones_flutter/views/profile_view.dart';
 
-final routerProvider = Provider<GoRouter>((ref) {
-	return  GoRouter(
+final routerProvider = Provider<GoRouter>(
+  (ref) {
+    return GoRouter(
       routes: [
-        GoRoute(
-          path: '/detalleGrupo',
-          name: 'detalleGrupo',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              MaterialPage<void>(
-            key: state.pageKey,
-            child: const GroupDetail(),
-          ),
-        ),
-        GoRoute(
-          path: '/perfil',
-          name: 'perfil',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              MaterialPage<void>(
-            key: state.pageKey,
-            child: const ProfileView(),
-          ),
-        ),
         GoRoute(
           path: '/login',
           name: 'login',
@@ -44,7 +28,31 @@ final routerProvider = Provider<GoRouter>((ref) {
             key: state.pageKey,
             child: const DashboardView(),
           ),
-        ),       
+        ),
+        GoRoute(
+          path: '/perfil',
+          name: 'perfil',
+          pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const ProfileView(),
+          ),
+        ),
+        GoRoute(
+          path: '/nuevoGrupo',
+          name: 'nuevoGrupo',
+          pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const NuevoGrupo(),
+          ),
+        ),
+        GoRoute(
+          path: '/detalleGrupo',
+          name: 'detalleGrupo',
+          pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+            key: state.pageKey,
+            child: const GroupDetail(),
+          ),
+        ),
       ],
       refreshListenable: ref.watch(loginProvider),
       redirect: (GoRouterState state) {
@@ -59,5 +67,5 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       },
     );
-    
-});
+  },
+);
