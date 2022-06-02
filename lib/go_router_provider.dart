@@ -11,25 +11,7 @@ import 'package:programador_reuniones_flutter/views/profile_view.dart';
 final routerProvider = Provider<GoRouter>((ref) {
 	return  GoRouter(
       routes: [
-        GoRoute(
-          path: '/detalleGrupo',
-          name: 'detalleGrupo',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              MaterialPage<void>(
-            key: state.pageKey,
-            child: const GroupDetail(),
-          ),
-        ),
-        GoRoute(
-          path: '/perfil',
-          name: 'perfil',
-          pageBuilder: (BuildContext context, GoRouterState state) =>
-              MaterialPage<void>(
-            key: state.pageKey,
-            child: const ProfileView(),
-          ),
-        ),
-        GoRoute(
+	      GoRoute(
           path: '/login',
           name: 'login',
           pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
@@ -44,7 +26,33 @@ final routerProvider = Provider<GoRouter>((ref) {
             key: state.pageKey,
             child: const DashboardView(),
           ),
-        ),       
+        ),
+	      GoRoute(
+          path: '/perfil',
+          name: 'perfil',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              MaterialPage<void>(
+            key: state.pageKey,
+            child: const ProfileView(),
+          ),
+        ),
+	      GoRoute(
+          path: '/nuevo-grupo',
+          name: 'nuevo-grupo',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              MaterialPage<void>(
+            key: state.pageKey,
+            child: const NuevoGrupo(),
+          ),
+        GoRoute(
+          path: '/detalleGrupo',
+          name: 'detalleGrupo',
+          pageBuilder: (BuildContext context, GoRouterState state) =>
+              MaterialPage<void>(
+            key: state.pageKey,
+            child: const GroupDetail(),
+          ),
+        ),
       ],
       refreshListenable: ref.watch(loginProvider),
       redirect: (GoRouterState state) {
