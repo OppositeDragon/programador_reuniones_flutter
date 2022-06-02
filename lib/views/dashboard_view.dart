@@ -16,84 +16,15 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
   PageController? controller;
   int paginaSeleccionada = 0;
 
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const AppBarWidget('Dashboard'),
-      body: size.width > 1000
-          ? Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: size.height - 156),
-                child: Row(
-                  children: const [
-                    SizedBox(width: 6),
-                    Flexible(
-                        fit: FlexFit.tight,
-                        child: Card(
-                          child: AspectRatio(aspectRatio: 0.5, child: HorarioPersonalWidget()),
-                        )),
-                    SizedBox(width: 12),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Card(
-                          child: AspectRatio(
-                        aspectRatio: 0.5,
-                        child: HorasTrabajoWidget(),
-                      )),
-                    ),
-                    SizedBox(width: 12),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Card(
-                          child: AspectRatio(
-                        aspectRatio: 0.5,
-                        child: GruposPersonal(),
-                      )),
-                    ),
-                    SizedBox(width: 6),
-                  ],
-                ),
-              ),
-            )
-          :size.width > 600? Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: size.height - 156),
-                child: Row(
-                  children:  [
-                    const SizedBox(width: 6),
-                    const Flexible(
-                        fit: FlexFit.tight,
-                        child: Card(
-                          child: AspectRatio(aspectRatio: 0.1, child: HorarioPersonalWidget()),
-                        )),
-                    const SizedBox(width: 12),
-										Column(children: const [
-											Flexible(
-                      fit: FlexFit.tight,
-                      child: Card(
-                          child: AspectRatio(
-                        aspectRatio:1,
-                        child: HorasTrabajoWidget(),
-                      )),
-                    ),
-                    SizedBox(height: 12),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Card(
-                          child: AspectRatio(
-                        aspectRatio: 1,
-                        child: GruposPersonal(),
-                      )),
-                    ),
-										],),
-                    
-                    const SizedBox(width: 6),
-                  ],
-                ),
-              ),
-            ) :PageView(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth < 600) {
+            return PageView(
               controller: controller,
               onPageChanged: (page) {
                 setState(() {
@@ -105,8 +36,43 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
                 HorasTrabajoWidget(),
                 GruposPersonal(),
               ],
-            ),
-      bottomNavigationBar: size.width > 600
+            );
+          }
+          if (constraints.maxWidth < 1100) {
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Flexible(flex: 6, child: Card(child: HorarioPersonalWidget())),
+                  Flexible(
+                    flex: 4,
+                    child: Column(
+                      children: const [
+                        Expanded(child: Card(child: HorasTrabajoWidget())),
+                        Expanded(child: Card(child: GruposPersonal())),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: const [
+                  Flexible(flex: 6, fit: FlexFit.tight, child: Card(child: HorarioPersonalWidget())),
+                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(child: HorasTrabajoWidget())),
+                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(child: GruposPersonal()))
+                ],
+              ),
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: size.width >= 600
           ? null
           : BottomNavigationBar(
               items: const <BottomNavigationBarItem>[
