@@ -1,5 +1,5 @@
 name: programador_reuniones_flutter
-description: Aplicacion multiplataforma creada con Flutter, para facilitar la programacion de reuniones.
+description: MeetGroup - Aplicacion multiplatafroma construida con Flutter para facilitar la programacion de reuniones.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
