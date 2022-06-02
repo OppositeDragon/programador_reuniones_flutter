@@ -55,7 +55,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   onPressed: () {
-                    context.pushNamed('nuevo-grupo');
+                    context.pushNamed('nuevoGrupo');
                   },
                   child: const Text("Nuevo"),
                 ),
