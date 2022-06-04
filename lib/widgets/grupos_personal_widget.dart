@@ -10,8 +10,7 @@ class GruposPersonal extends ConsumerStatefulWidget {
 }
 
 class _GruposPersonalState extends ConsumerState<GruposPersonal> {
-  late List<String> items =
-      List.generate(13, (index) => 'Grupo numero${index + 1}');
+  final List<String> items = List.generate(13, (index) => 'Grupo numero${index + 1}');
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
               separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: const CircleAvatar(),
+                  leading: CircleAvatar(child: Text(index.toString()),),
                   title: Text(items[index]),
                   subtitle: const Text('Descripcion de grupo'),
                   trailing: const Icon(Icons.arrow_right_sharp),
@@ -37,14 +36,15 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
               },
             ),
             Positioned(
-                bottom: 20,
-                right: 20,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    context.pushNamed('nuevoGrupo');
-                  },
-                  child: const Icon(Icons.add),
-                )),
+              bottom: 20,
+              right: 20,
+              child: FloatingActionButton(
+                onPressed: () {
+                  context.pushNamed('nuevoGrupo');
+                },
+                child: const Icon(Icons.add),
+              ),
+            ),
           ],
         ),
       ),

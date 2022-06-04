@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 
 class NuevoGrupo extends StatefulWidget {
   const NuevoGrupo({Key? key}) : super(key: key);
@@ -15,53 +16,49 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.settings),
-        )
-      ]),
+      appBar: const AppBarWidget('Crear grupo'),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Title(
-                  color: Theme.of(context).primaryColor,
-                  child: const Text(
-                    "Nuevo Grupo",
-                    style: TextStyle(
-                      fontSize: 25,
+              Row(children: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Nombre de grupo",
+                      border: OutlineInputBorder(),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Ingrese el nombre del grupo";
+                      }
+                      return null;
+                    },
                   ),
                 ),
-              ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Nombre de grupo",
-                  border: OutlineInputBorder(),
+                //	const	SizedBox(width: 10),
+
+                const SizedBox(
+                  width: 60,
+                  height: 50,
+                  child: VerticalDivider(width: 2),
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Ingresa el nombre del grupo";
-                  }
-                },
-              ),
-              IconButton(
-                onPressed: () async {
-                  final resultado =
-                      await showSearch(context: context, delegate: Busqueda());
-                  if (resultado != "") {
-                    setState(() {
-                      integrantes.add(resultado);
-                    });
-                  }
-                },
-                icon: const Icon(Icons.search),
-              ),
+                const Text('Buscar integrantes: '),
+                IconButton(
+                  onPressed: () async {
+                    final resultado = await showSearch(context: context, delegate: Busqueda());
+                    if (resultado != "") {
+                      setState(() {
+                        integrantes.add(resultado);
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.search),
+                ),
+              ]),
+
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
@@ -79,8 +76,7 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                         setState(() {
                           integrantes.removeAt(index);
                         });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('$sugerencia eliminado.')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$sugerencia eliminado.')));
                       },
                       child: ListTile(
                         leading: const Icon(Icons.tab_unselected_rounded),
@@ -98,8 +94,7 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: SizedBox(
                               child: Text('Procesando'),
                             ),
@@ -180,10 +175,10 @@ class Busqueda extends SearchDelegate<String> {
             return usuarioLower.startsWith(queryLower);
           }).toList();
 
-    return buildSuggestionsSucces(sugerencias);
+    return buildSuggestionsSuccess(sugerencias);
   }
 
-  Widget buildSuggestionsSucces(List<String> sugerencias) {
+  Widget buildSuggestionsSuccess(List<String> sugerencias) {
     return ListView.builder(
       itemCount: sugerencias.length,
       itemBuilder: (context, index) {
