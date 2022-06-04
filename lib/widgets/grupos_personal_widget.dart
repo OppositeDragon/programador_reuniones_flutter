@@ -10,7 +10,8 @@ class GruposPersonal extends ConsumerStatefulWidget {
 }
 
 class _GruposPersonalState extends ConsumerState<GruposPersonal> {
-  late List<String> items = List.generate(13, (index) => 'Grupo numero${index + 1}');
+  late List<String> items =
+      List.generate(13, (index) => 'Grupo numero${index + 1}');
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,9 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
                   title: Text(items[index]),
                   subtitle: const Text('Descripcion de grupo'),
                   trailing: const Icon(Icons.arrow_right_sharp),
+                  onTap: () {
+                    context.pushNamed('detalleGrupo');
+                  },
                 );
               },
             ),
