@@ -17,4 +17,15 @@ class GroupController with ChangeNotifier {
     });
     print(docRef.toString());
   }
+
+  Future<void> getUsers(String user) async {
+    final usersRef = await FirebaseFirestore.instance.collection("users")
+    .where("usuario", isGreaterThanOrEqualTo: user)
+    .where("usuario", isLessThanOrEqualTo: '$user\uf8ff')
+    .get();
+    // print('usersRef: ${usersRef.docs.length}');
+    // for (var element in usersRef.docs) {
+    //   print('${element.data()}');
+    // }
+  }
 }
