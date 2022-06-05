@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
+import 'package:programador_reuniones_flutter/views/create_group_view.dart';
 import 'package:programador_reuniones_flutter/views/dashboard_view.dart';
 import 'package:programador_reuniones_flutter/views/group_detail.dart';
 import 'package:programador_reuniones_flutter/views/login_view.dart';
-import 'package:programador_reuniones_flutter/views/nuevo_grupo_view.dart';
 import 'package:programador_reuniones_flutter/views/profile_view.dart';
 
 final routerProvider = Provider<GoRouter>(
@@ -42,7 +42,7 @@ final routerProvider = Provider<GoRouter>(
           name: 'nuevoGrupo',
           pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
             key: state.pageKey,
-            child: const NuevoGrupo(),
+            child: const CreateGroupView(),
           ),
         ),
         GoRoute(

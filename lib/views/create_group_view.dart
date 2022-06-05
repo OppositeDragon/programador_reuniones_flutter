@@ -1,64 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 
-class NuevoGrupo extends StatefulWidget {
-  const NuevoGrupo({Key? key}) : super(key: key);
+class CreateGroupView extends ConsumerStatefulWidget {
+  const CreateGroupView({super.key});
 
   @override
-  State<NuevoGrupo> createState() => _NuevoGrupoState();
+  ConsumerState<CreateGroupView> createState() => _CreateGroupView();
 }
 
-class _NuevoGrupoState extends State<NuevoGrupo> {
+class _CreateGroupView extends ConsumerState<CreateGroupView> {
   final _formKey = GlobalKey<FormState>();
-  final integrantes = [];
-
+  final List<String> integrantes = [];
+  String nombre = '';
+  String descripcion = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarWidget('Crear grupo'),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              Row(children: [
-                Expanded(
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Nombre de grupo",
-                      border: OutlineInputBorder(),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "Nombre de grupo",
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            if (value!.isEmpty || value.length < 4) {
+                              return "Ingrese el nombre del grupo";
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            nombre = value!;
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: "Descripcion de grupo",
+                            border: OutlineInputBorder(),
+                          ),
+                          maxLines: 3,
+                          autocorrect: true,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value!.isEmpty || value.length < 10) {
+                              return "Ingrese descripcion del grupo (minimo 10 caracteres)";
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            descripcion = value!;
+                          },
+                        ),
+                      ],
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Ingrese el nombre del grupo";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                //	const	SizedBox(width: 10),
-
-                const SizedBox(
-                  width: 60,
-                  height: 50,
-                  child: VerticalDivider(width: 2),
-                ),
-                const Text('Buscar integrantes: '),
-                IconButton(
-                  onPressed: () async {
-                    final resultado = await showSearch(context: context, delegate: Busqueda());
-                    if (resultado != "") {
-                      setState(() {
-                        integrantes.add(resultado);
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.search),
-                ),
-              ]),
-
+                  const SizedBox(
+                    width: 60,
+                    height: 50,
+                    child: VerticalDivider(width: 2),
+                  ),
+                  const Text('Buscar integrantes: '),
+                  IconButton(
+                    onPressed: () async {
+                      final resultado = await showSearch(context: context, delegate: Busqueda());
+                      if (resultado!.isNotEmpty && resultado != "") {
+                        setState(() {
+                          integrantes.add(resultado);
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.search),
+                  ),
+                ],
+              ),
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
@@ -68,9 +97,9 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                     return Dismissible(
                       key: Key(sugerencia),
                       background: Container(
-                        color: Color.fromARGB(140, 224, 70, 59),
-                        child: Icon(Icons.delete),
+                        color: const Color.fromARGB(140, 224, 70, 59),
                         alignment: Alignment.topLeft,
+                        child: const Icon(Icons.delete),
                       ),
                       onDismissed: (direction) {
                         setState(() {
@@ -94,17 +123,21 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: SizedBox(
-                              child: Text('Procesando'),
+                          _formKey.currentState!.save();
+                          ref.read(groupProvider).createGroup(nombre, descripcion, integrantes);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: SizedBox(
+                                child: Text('Procesando'),
+                              ),
                             ),
-                          ));
+                          );
                         }
                       },
                       child: const SizedBox(
-                        width: 60,
+                        width: 80,
                         child: Text(
-                          "Crear",
+                          "Crear grupo",
                           textAlign: TextAlign.center,
                         ),
                       )),
@@ -113,7 +146,7 @@ class _NuevoGrupoState extends State<NuevoGrupo> {
                         context.pop();
                       },
                       child: const SizedBox(
-                        width: 60,
+                        width: 80,
                         child: Text(
                           "Cancelar",
                           textAlign: TextAlign.center,
