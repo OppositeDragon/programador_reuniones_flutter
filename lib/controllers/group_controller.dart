@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,8 @@ class GroupController with ChangeNotifier {
   List<UserModel> _listaUsuarios = [];
   List<UserModel> get listaUsuarios => _listaUsuarios;
   Future<void> createGroup(String nombre, String descripcion, List<UserModel> integrantes) async {
-    List<String> members = [];
+    Set<String> members = {};
+    members.add(FirebaseAuth.instance.currentUser!.uid);
     for (var element in integrantes) {
       members.add(element.userId);
     }
@@ -72,5 +75,15 @@ class GroupController with ChangeNotifier {
     }
     _listaUsuarios = setUsuarios.toList();
     notifyListeners();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getGrupos() {
+    final grupos =
+        FirebaseFirestore.instance.collection("groups").where('integrantes', arrayContains: FirebaseAuth.instance.currentUser!.uid).snapshots();
+    // .listen(
+    //       (event) => event.docs.forEach((element) { print(element.data()); }),
+    //       onError: (error) => print("Listen failed: $error"),
+    //     );
+    return grupos;
   }
 }
