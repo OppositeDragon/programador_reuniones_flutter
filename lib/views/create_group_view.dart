@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
+import 'package:programador_reuniones_flutter/models/user_model.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
+import 'package:programador_reuniones_flutter/widgets/search_listview.dart';
 
 class CreateGroupView extends ConsumerStatefulWidget {
   const CreateGroupView({super.key});
@@ -13,7 +15,7 @@ class CreateGroupView extends ConsumerStatefulWidget {
 
 class _CreateGroupView extends ConsumerState<CreateGroupView> {
   final _formKey = GlobalKey<FormState>();
-  final List<String> integrantes = [];
+  final List<UserModel> integrantes = [];
   String nombre = '';
   String descripcion = '';
   @override
@@ -77,10 +79,14 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
                   const Text('Buscar integrantes: '),
                   IconButton(
                     onPressed: () async {
-                      final resultado = await showSearch(context: context, delegate: Busqueda());
-                      if (resultado!.isNotEmpty && resultado != "") {
+                      final UserModel? user = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const SearchListView();
+                          });
+                      if (user != null) {
                         setState(() {
-                          integrantes.add(resultado);
+                          integrantes.add(user);
                         });
                       }
                     },
@@ -95,7 +101,7 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
                   itemBuilder: (context, index) {
                     final sugerencia = integrantes[index];
                     return Dismissible(
-                      key: Key(sugerencia),
+                      key: Key(sugerencia.userId),
                       background: Container(
                         color: const Color.fromARGB(140, 224, 70, 59),
                         alignment: Alignment.topLeft,
@@ -105,11 +111,11 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
                         setState(() {
                           integrantes.removeAt(index);
                         });
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$sugerencia eliminado.')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${sugerencia.email} eliminado.')));
                       },
                       child: ListTile(
-                        leading: const Icon(Icons.tab_unselected_rounded),
-                        title: Text(sugerencia),
+                        leading: CircleAvatar(child: Text(sugerencia.name.substring(0, 1) + sugerencia.lastName.substring(0, 1))),
+                        title: Text(sugerencia.userAndEmail),
                         onTap: () {},
                       ),
                     );
@@ -158,73 +164,6 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class Busqueda extends SearchDelegate<String> {
-  final usuarios = ["Erick", "Josué", "Lenin", "Steven", "Jean"];
-  final usuariosRecientes = ["Erick", "Josué"];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          if (query.isEmpty) {
-            close(context, "");
-          } else {
-            query = "";
-          }
-        },
-        icon: const Icon(Icons.clear),
-      ),
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, "");
-      },
-      icon: const Icon(Icons.arrow_back),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final sugerencias = query.isEmpty
-        ? usuariosRecientes
-        : usuarios.where((usuario) {
-            final usuarioLower = usuario.toLowerCase();
-            final queryLower = query.toLowerCase();
-
-            return usuarioLower.startsWith(queryLower);
-          }).toList();
-
-    return buildSuggestionsSuccess(sugerencias);
-  }
-
-  Widget buildSuggestionsSuccess(List<String> sugerencias) {
-    return ListView.builder(
-      itemCount: sugerencias.length,
-      itemBuilder: (context, index) {
-        final sugerencia = sugerencias[index];
-        return ListTile(
-          leading: const Icon(Icons.tab_unselected_rounded),
-          title: Text(sugerencia),
-          onTap: () {
-            query = sugerencia;
-            close(context, query);
-          },
-        );
-      },
     );
   }
 }
