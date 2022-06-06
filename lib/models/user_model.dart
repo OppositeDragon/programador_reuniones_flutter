@@ -7,6 +7,7 @@ class UserModel {
   String phone;
   String name;
   String lastName;
+  late String userAndEmail;
   UserModel(
     this.userId,
     this.email,
@@ -14,7 +15,9 @@ class UserModel {
     this.phone,
     this.name,
     this.lastName,
-  );
+  ) {
+    userAndEmail = '$user  ($email)';
+  }
 
   UserModel copyWith({
     String? userId,
@@ -60,8 +63,7 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -83,11 +85,6 @@ class UserModel {
 
   @override
   int get hashCode {
-    return userId.hashCode ^
-        email.hashCode ^
-        user.hashCode ^
-        phone.hashCode ^
-        name.hashCode ^
-        lastName.hashCode;
+    return userId.hashCode ^ email.hashCode ^ user.hashCode ^ phone.hashCode ^ name.hashCode ^ lastName.hashCode;
   }
 }
