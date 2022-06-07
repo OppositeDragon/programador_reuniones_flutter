@@ -127,37 +127,37 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          ref.read(groupProvider).createGroup(nombre, descripcion, integrantes);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: SizedBox(
-                                child: Text('Procesando'),
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      child: const SizedBox(
-                        width: 80,
-                        child: Text(
-                          "Crear grupo",
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
-                  ElevatedButton(
-                      onPressed: () {
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Procesando'), duration: Duration(milliseconds: 1500)),
+                        );
+                        await ref.read(groupProvider).createGroup(nombre, descripcion, integrantes);
+                        if (!mounted) return;
                         context.pop();
-                      },
-                      child: const SizedBox(
-                        width: 80,
-                        child: Text(
-                          "Cancelar",
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
+                      }
+                    },
+                    child: const SizedBox(
+                      width: 80,
+                      child: Text(
+                        "Crear grupo",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    child: const SizedBox(
+                      width: 80,
+                      child: Text(
+                        "Cancelar",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],
