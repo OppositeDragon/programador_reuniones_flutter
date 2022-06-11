@@ -34,7 +34,7 @@ class PopUpMenu extends ConsumerWidget {
 
       itemBuilder: (BuildContext context) {
         return [
-          if (ref.watch(routerProvider).location != '/perfil')
+          if (router.location != '/perfil')
             PopupMenuItem(
               child: ListTile(
                 title: const Text('Perfil'),

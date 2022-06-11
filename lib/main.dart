@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/go_router_provider.dart';
 import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,8 +28,8 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      routeInformationParser: ref.read(routerProvider).routeInformationParser,
-      routerDelegate: ref.read(routerProvider).routerDelegate,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
       title: 'GroupMeet',
       theme: ref.watch(themeProvider).themeData,
     );

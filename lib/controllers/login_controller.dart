@@ -9,9 +9,15 @@ final loginProvider = ChangeNotifierProvider<LoginController>((ref) => LoginCont
 class LoginController with ChangeNotifier {
   bool _isLoading = false;
   bool _showPassword = false;
-
+  User? _user;
+  User? get user => _user;
   bool get isLoading => _isLoading;
   bool get showPassword => _showPassword;
+  setUser() async {
+    _user = await FirebaseAuth.instance.authStateChanges().first;
+    notifyListeners();
+  }
+
   set isLoading(bool isLoading) {
     _isLoading = isLoading;
     notifyListeners();
