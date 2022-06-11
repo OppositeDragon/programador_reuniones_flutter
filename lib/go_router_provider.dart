@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/views/create_group_view.dart';
 import 'package:programador_reuniones_flutter/views/dashboard_view.dart';
-import 'package:programador_reuniones_flutter/views/group_detail.dart';
+import 'package:programador_reuniones_flutter/views/group_detail_view.dart';
 import 'package:programador_reuniones_flutter/views/login_view.dart';
 import 'package:programador_reuniones_flutter/views/profile_view.dart';
 
@@ -46,7 +46,7 @@ final router = GoRouter(
       name: 'detalleGrupo',
       pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
         key: state.pageKey,
-        child: const GroupDetail(),
+        child: const GroupDetailView(),
       ),
     ),
   ],
