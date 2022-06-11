@@ -114,7 +114,11 @@ class _CreateGroupView extends ConsumerState<CreateGroupView> {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${sugerencia.email} eliminado.')));
                       },
                       child: ListTile(
-                        leading: CircleAvatar(child: Text(sugerencia.name.substring(0, 1) + sugerencia.lastName.substring(0, 1))),
+                        leading: CircleAvatar(
+                          child: Text(
+                            (sugerencia.name.isEmpty ? '' : sugerencia.name[0]) + (sugerencia.lastName.isEmpty ? '' : sugerencia.lastName[0]),
+                          ),
+                        ),
                         title: Text(sugerencia.userAndEmail),
                         onTap: () {},
                       ),
