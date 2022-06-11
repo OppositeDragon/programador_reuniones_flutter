@@ -13,6 +13,7 @@ final groupProvider = ChangeNotifierProvider<GroupController>((ref) {
 class GroupController with ChangeNotifier {
   List<UserModel> _listaUsuarios = [];
   List<UserModel> get listaUsuarios => _listaUsuarios;
+
   Future<void> createGroup(String nombre, String descripcion, List<UserModel> integrantes) async {
     Set<String> members = {};
     members.add(FirebaseAuth.instance.currentUser!.uid);
@@ -23,9 +24,8 @@ class GroupController with ChangeNotifier {
       'nombre': nombre,
       'descripcion': descripcion,
       'admin': FirebaseAuth.instance.currentUser!.uid,
-      'integrantes': members,
+      'integrantes': members.toList(),
     });
-    //print(docRef.toString());
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getUsersByUser(String value) async {
@@ -78,12 +78,13 @@ class GroupController with ChangeNotifier {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getGrupos() {
-    final grupos =
-        FirebaseFirestore.instance.collection("groups").where('integrantes', arrayContains: FirebaseAuth.instance.currentUser!.uid).snapshots();
-    // .listen(
-    //       (event) => event.docs.forEach((element) { print(element.data()); }),
-    //       onError: (error) => print("Listen failed: $error"),
-    //     );
+    final grupos = FirebaseFirestore.instance
+        .collection("groups")
+        .where(
+          'integrantes',
+          arrayContains: FirebaseAuth.instance.currentUser!.uid,
+        )
+        .snapshots();
     return grupos;
   }
 }
