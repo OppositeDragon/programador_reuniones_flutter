@@ -30,7 +30,9 @@ class SearchListView extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final sugerencia = sugerencias[index];
                   return ListTile(
-                    leading: CircleAvatar(child: Text(sugerencia.name.substring(0, 1) + sugerencia.lastName.substring(0, 1))),
+                    leading: CircleAvatar(
+                      child: Text((sugerencia.name.isEmpty ? '' : sugerencia.name[0]) + (sugerencia.lastName.isEmpty ? '' : sugerencia.lastName[0])),
+                    ),
                     title: Text(sugerencia.user),
                     subtitle: Text(sugerencia.email),
                     onTap: () {

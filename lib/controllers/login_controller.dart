@@ -7,6 +7,21 @@ import 'package:google_sign_in/google_sign_in.dart';
 final loginProvider = ChangeNotifierProvider<LoginController>((ref) => LoginController());
 
 class LoginController with ChangeNotifier {
+  bool _isLoading = false;
+  bool _showPassword = false;
+
+  bool get isLoading => _isLoading;
+  bool get showPassword => _showPassword;
+  set isLoading(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
+  set showPassword(bool showPassword) {
+    _showPassword = showPassword;
+    notifyListeners();
+  }
+
   Future<UserCredential> createEmailPassword(String email, String password) async {
     late UserCredential authResult;
     try {

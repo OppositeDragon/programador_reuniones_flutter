@@ -4,22 +4,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userProvider = ChangeNotifierProvider.autoDispose<UserController>((ref) {
-  return UserController();
-});
+final userProvider = ChangeNotifierProvider<UserController>((ref) => UserController());
 
 class UserController with ChangeNotifier {
+  String _password = '';
   Map<String, dynamic>? _userData;
-  Map<String, dynamic>? get userData => _userData;
 
-  Future<void> putUserData(UserCredential authResult, String email, String usuario, String telefono, String nombre, String apellido) async {
-    FirebaseFirestore.instance.collection('users').doc(authResult.user!.uid).set({
-      'email': email,
-      'usuario': usuario,
-      'telefono': telefono,
-      'nombre': nombre,
-      'apellido': apellido,
-    });
+  String get password => _password;
+  Map<String, dynamic>? get userData => _userData;
+  set password(String value) {
+    _password = value;
+    notifyListeners();
+  }
+
+  Future<void> putUserData(
+    String userUID,
+    String email,
+    String usuario,
+    String telefono,
+    String nombre,
+    String apellido,
+    String proveedor,
+  ) async {
+    FirebaseFirestore.instance.collection('users').doc(userUID).set(
+      {
+        'email': email,
+        'usuario': usuario,
+        'telefono': telefono,
+        'nombre': nombre,
+        'apellido': apellido,
+        'proveedor': proveedor,
+      },
+      SetOptions(merge: true),
+    );
   }
 
   Future<void> getUserData() async {
@@ -70,8 +87,6 @@ class UserController with ChangeNotifier {
           break;
         default:
       }
-
-      print(_userData);
     }
     notifyListeners();
   }
@@ -84,13 +99,5 @@ class UserController with ChangeNotifier {
       'nombre': name,
       'apellido': lastName,
     }, SetOptions(merge: true));
-  }
-
-  String _password = '';
-  String get password => _password;
-
-  void setPassword(String value) {
-    _password = value;
-    notifyListeners();
   }
 }
