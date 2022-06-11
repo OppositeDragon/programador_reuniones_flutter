@@ -17,71 +17,75 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 550),
-        child: Stack(
-          children: [
-            StreamBuilder(
-              stream: ref.read(groupProvider).getGrupos(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Algo ha salido mal');
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return ListView.builder(
-                  itemCount: snapshot.data?.docs.length,
-                  itemBuilder: (context, index) {
-                    final grupoData = snapshot.data?.docs[index].data() as Map<String, dynamic>;
-                    //final integrantesData = grupoData['integrantes'] as List<String>;
-                    return ListTile(
-                      isThreeLine: true,
-                      leading: CircleAvatar(
-                          radius: 22,
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text('${grupoData['integrantes'].length}'),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: ArcText(
-                                    stretchAngle: 354.7,
-                                    startAngle: 4.0,
-                                    radius: 11.4,
-                                    textStyle: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w800),
-                                    text: 'miembros',
-                                    // startAngleAlignment: StartAngleAlignment.end,
-                                    placement: Placement.outside,
-                                    direction: Direction.clockwise),
-                              ),
-                            ],
-                          )),
-                      title: Text('${grupoData['nombre']}'),
-                      subtitle: Text('${grupoData['descripcion']}'),
-                    );
-                  },
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 550),
+      child: Stack(
+        children: [
+          StreamBuilder(
+            stream: ref.read(groupProvider).getGrupos(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Algo ha salido mal ${snapshot.error}');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.data?.docs != null && snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text(
+                    'Aun no tienes grupos',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 );
-              },
-            ),
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: FloatingActionButton(
-                mini: true,
-                onPressed: () {
-                  context.pushNamed('nuevoGrupo');
+              }
+              return ListView.builder(
+                itemCount: snapshot.data?.docs.length,
+                itemBuilder: (context, index) {
+                  final grupoData = snapshot.data?.docs[index].data() as Map<String, dynamic>;
+                  return ListTile(
+                    isThreeLine: true,
+                    leading: CircleAvatar(
+                        radius: 22,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text('${grupoData['integrantes'].length}'),
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: ArcText(
+                                  stretchAngle: 354.7,
+                                  startAngle: 4.0,
+                                  radius: 11.4,
+                                  textStyle: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w800),
+                                  text: 'miembros',
+                                  // startAngleAlignment: StartAngleAlignment.end,
+                                  placement: Placement.outside,
+                                  direction: Direction.clockwise),
+                            ),
+                          ],
+                        )),
+                    title: Text('${grupoData['nombre']}'),
+                    subtitle: Text('${grupoData['descripcion']}'),
+                    onTap: () => context.pushNamed('detalleGrupo'),
+                  );
                 },
-                child: const Icon(Icons.add),
-              ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton(
+              mini: true,
+              onPressed: () {
+                context.pushNamed('nuevoGrupo');
+              },
+              child: const Icon(Icons.add),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
