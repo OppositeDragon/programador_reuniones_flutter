@@ -20,12 +20,15 @@ class GroupController with ChangeNotifier {
     for (var element in integrantes) {
       members.add(element.userId);
     }
-    final DocumentReference<Map<String, dynamic>> docRef = await FirebaseFirestore.instance.collection("groups").add({
+    final document = FirebaseFirestore.instance.collection("groups").doc();
+
+    await document.set({
+      'docId': document.id,
       'nombre': nombre,
       'descripcion': descripcion,
       'admin': FirebaseAuth.instance.currentUser!.uid,
       'integrantes': members.toList(),
-    });
+    }, SetOptions(merge: true));
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getUsersByUser(String value) async {
@@ -87,4 +90,13 @@ class GroupController with ChangeNotifier {
         .snapshots();
     return grupos;
   }
+
+  Future<void> getGroupById(String? groupId) async {
+    final docRef = await FirebaseFirestore.instance.collection("groups").doc(groupId).get();
+    _groupData = docRef.data();
+    notifyListeners();
+  }
+
+  Map<String, dynamic>? _groupData;
+  Map<String, dynamic>? get groupData => _groupData;
 }
