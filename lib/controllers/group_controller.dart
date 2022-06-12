@@ -91,10 +91,11 @@ class GroupController with ChangeNotifier {
     return grupos;
   }
 
-  Future<void> getGroupById(String? groupId) async {
+  Future<Map<String, dynamic>?> getGroupById(String? groupId) async {
     final docRef = await FirebaseFirestore.instance.collection("groups").doc(groupId).get();
     _groupData = docRef.data();
     notifyListeners();
+    return _groupData;
   }
 
   Map<String, dynamic>? _groupData;
