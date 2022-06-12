@@ -18,13 +18,33 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-      path: '/',
-      name: 'dashboard',
-      pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const DashboardView(),
-      ),
-    ),
+        path: '/',
+        name: 'dashboard',
+        pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+              key: state.pageKey,
+              child: const DashboardView(),
+            ),
+        routes: [
+          GoRoute(
+            path: 'nuevoGrupo',
+            name: 'nuevoGrupo',
+            pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+              key: state.pageKey,
+              child: const CreateGroupView(),
+            ),
+          ),
+          GoRoute(
+            path: 'detalleGrupo/:id',
+            name: 'detalleGrupo',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              final groupId = state.params['id'];
+              return MaterialPage<void>(
+                key: state.pageKey,
+                child: GroupDetailView(groupId),
+              );
+            },
+          ),
+        ]),
     GoRoute(
       path: '/perfil',
       name: 'perfil',
@@ -33,31 +53,19 @@ final router = GoRouter(
         child: const ProfileView(),
       ),
     ),
-    GoRoute(
-      path: '/nuevoGrupo',
-      name: 'nuevoGrupo',
-      pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const CreateGroupView(),
-      ),
-    ),
-    GoRoute(
-      path: '/detalleGrupo',
-      name: 'detalleGrupo',
-      pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-        key: state.pageKey,
-        child: const GroupDetailView(),
-      ),
-    ),
   ],
   refreshListenable: GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
   redirect: (GoRouterState state) {
     final loggedIn = FirebaseAuth.instance.currentUser != null;
     final loggingIn = state.subloc == '/login';
-    if (!loggedIn) return loggingIn ? null : '/login';
+
+    // bundle the location the user is coming from into a query parameter
+    final fromp = state.subloc == '/' ? '' : '?from=${state.subloc}';
+    if (!loggedIn) return loggingIn ? null : '/login$fromp';
+
     // if the user is logged in but still on the login page, send them to
     // the home page
-    if (loggingIn) return '/';
+    if (loggingIn) return state.queryParams['from'] ?? '/';
     // no need to redirect at all
     return null;
   },

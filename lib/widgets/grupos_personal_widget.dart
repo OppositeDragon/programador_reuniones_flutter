@@ -68,7 +68,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
                         )),
                     title: Text('${grupoData['nombre']}'),
                     subtitle: Text('${grupoData['descripcion']}'),
-                    onTap: () => context.pushNamed('detalleGrupo'),
+                    onTap: () => context.pushNamed('detalleGrupo', params: {'id':snapshot.data!.docs[index].id}),
                   );
                 },
               );
