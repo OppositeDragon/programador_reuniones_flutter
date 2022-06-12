@@ -9,9 +9,12 @@ final userProvider = ChangeNotifierProvider<UserController>((ref) => UserControl
 class UserController with ChangeNotifier {
   String _password = '';
   Map<String, dynamic>? _userData;
-
+  List<Map<String, dynamic>?> _integrantes = <Map<String, dynamic>?>[];
   String get password => _password;
   Map<String, dynamic>? get userData => _userData;
+  List<Map<String, dynamic>?> get integrantes => _integrantes;
+
+  get users => null;
   set password(String value) {
     _password = value;
     notifyListeners();
@@ -99,5 +102,15 @@ class UserController with ChangeNotifier {
       'nombre': name,
       'apellido': lastName,
     }, SetOptions(merge: true));
+  }
+
+  Future<void> getIntegrantes(List<dynamic> lIntegrantes) async {
+    final List<Map<String, dynamic>?> integrantes = [];
+    for (var element in lIntegrantes) {
+      final integrante = await FirebaseFirestore.instance.collection('users').doc(element).get();
+      integrantes.add(integrante.data());
+    }
+    _integrantes = integrantes;
+    notifyListeners();
   }
 }
