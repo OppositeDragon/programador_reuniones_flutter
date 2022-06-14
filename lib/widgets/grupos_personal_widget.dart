@@ -13,8 +13,6 @@ class GruposPersonal extends ConsumerStatefulWidget {
 }
 
 class _GruposPersonalState extends ConsumerState<GruposPersonal> {
-  final List<String> items = List.generate(13, (index) => 'Grupo numero${index + 1}');
-
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
@@ -68,7 +66,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
                         )),
                     title: Text('${grupoData['nombre']}'),
                     subtitle: Text('${grupoData['descripcion']}'),
-                    onTap: () => context.pushNamed('detalleGrupo', params: {'id':snapshot.data!.docs[index].id}),
+                    onTap: () => context.pushNamed('grupo', params: {'gid': snapshot.data!.docs[index].id}),
                   );
                 },
               );
@@ -79,9 +77,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
             right: 20,
             child: FloatingActionButton(
               mini: true,
-              onPressed: () {
-                context.pushNamed('nuevoGrupo');
-              },
+              onPressed: () => context.pushNamed('nuevo'), //,params:{'id':'nuevo'});              ,
               child: const Icon(Icons.add),
             ),
           ),

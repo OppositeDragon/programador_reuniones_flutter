@@ -28,14 +28,16 @@ class SearchListView extends ConsumerWidget {
               child: ListView.builder(
                 itemCount: sugerencias.length,
                 itemBuilder: (context, index) {
-                  final sugerencia = sugerencias[index];
+                  final sugerencia = sugerencias.elementAt(index);
                   return ListTile(
                     leading: CircleAvatar(
-                      child: Text((sugerencia.name.isEmpty ? '' : sugerencia.name[0]) + (sugerencia.lastName.isEmpty ? '' : sugerencia.lastName[0])),
+                      child:
+                          Text((sugerencia.nombre.isEmpty ? '' : sugerencia.nombre[0]) + (sugerencia.apellido.isEmpty ? '' : sugerencia.apellido[0])),
                     ),
-                    title: Text(sugerencia.user),
+                    title: Text(sugerencia.usuario),
                     subtitle: Text(sugerencia.email),
                     onTap: () {
+                      // ref.read(groupProvider).addIntegrante(sugerencia);
                       Navigator.of(context).pop(sugerencia);
                     },
                   );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
-import 'package:programador_reuniones_flutter/go_router_provider.dart';
+import 'package:programador_reuniones_flutter/go_router.dart';
 import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -47,7 +47,7 @@ class PopUpMenu extends ConsumerWidget {
           PopupMenuItem(
               child: ListTile(
             title: const Text('Tema'),
-            trailing:const Icon(Icons.brightness_4_sharp),
+            trailing: const Icon(Icons.brightness_4_sharp),
             onTap: () {
               //isDark = !isDark;
               ref.read(themeProvider).setTheme(isDark);
