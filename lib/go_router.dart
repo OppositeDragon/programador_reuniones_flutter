@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:programador_reuniones_flutter/views/create_group_view.dart';
+import 'package:programador_reuniones_flutter/views/create_edit_group_view.dart';
 import 'package:programador_reuniones_flutter/views/dashboard_view.dart';
 import 'package:programador_reuniones_flutter/views/group_detail_view.dart';
 import 'package:programador_reuniones_flutter/views/login_view.dart';
@@ -18,41 +18,56 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
-        path: '/',
-        name: 'dashboard',
-        pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-              key: state.pageKey,
-              child: const DashboardView(),
-            ),
-        routes: [
-          GoRoute(
-            path: 'nuevoGrupo',
-            name: 'nuevoGrupo',
-            pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
-              key: state.pageKey,
-              child: const CreateGroupView(),
-            ),
-          ),
-          GoRoute(
-            path: 'detalleGrupo/:id',
-            name: 'detalleGrupo',
-            pageBuilder: (BuildContext context, GoRouterState state) {
-              final groupId = state.params['id'];
-              return MaterialPage<void>(
-                key: state.pageKey,
-                child: GroupDetailView(groupId),
-              );
-            },
-          ),
-        ]),
-    GoRoute(
-      path: '/perfil',
+      path: '/',
+      name: 'dashboard',
+      pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: const DashboardView(),
+      ),
+      routes: [
+				 GoRoute(
+      path: 'perfil',
       name: 'perfil',
       pageBuilder: (BuildContext context, GoRouterState state) => MaterialPage<void>(
         key: state.pageKey,
         child: const ProfileView(),
       ),
     ),
+        GoRoute(
+          path: 'grupo/nuevo',
+          name: 'nuevo',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return MaterialPage<void>(
+              key: state.pageKey,
+              child: const CreateEditGroupView('nuevo'),
+            );
+          },
+        ),
+        GoRoute(
+          path: 'grupo/:gid',
+          name: 'grupo',
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return MaterialPage<void>(
+              key: state.pageKey,
+              child: GroupDetailView(state.params['gid']!),
+            );
+          },
+          routes: [
+            GoRoute(
+              path: 'editar',
+              name: 'editar',
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                return MaterialPage<void>(
+                  key: state.pageKey,
+                  child: CreateEditGroupView(state.params['gid']!),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+   
   ],
   refreshListenable: GoRouterRefreshStream(FirebaseAuth.instance.authStateChanges()),
   redirect: (GoRouterState state) {
