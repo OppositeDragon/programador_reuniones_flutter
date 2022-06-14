@@ -3,20 +3,23 @@ import 'dart:convert';
 class UserModel {
   String userId;
   String email;
-  String user;
-  String phone;
-  String name;
-  String lastName;
+  String usuario;
+  String telefono;
+  String nombre;
+  String apellido;
+  String proveedor;
   late String userAndEmail;
-  UserModel(
-    this.userId,
-    this.email,
-    this.user,
-    this.phone,
-    this.name,
-    this.lastName,
-  ) {
-    userAndEmail = '$user  ($email)';
+
+  UserModel({
+    required this.userId,
+    required this.email,
+    required this.usuario,
+    required this.telefono,
+    required this.nombre,
+    required this.apellido,
+    required this.proveedor,
+  }) {
+    userAndEmail = '$usuario  ($email)';
   }
 
   UserModel copyWith({
@@ -26,14 +29,16 @@ class UserModel {
     String? telefono,
     String? nombre,
     String? apellido,
+    String? proveedor,
   }) {
     return UserModel(
-      userId ?? this.userId,
-      email ?? this.email,
-      usuario ?? this.user,
-      telefono ?? this.phone,
-      nombre ?? this.name,
-      apellido ?? this.lastName,
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      usuario: usuario ?? this.usuario,
+      telefono: telefono ?? this.telefono,
+      nombre: nombre ?? this.nombre,
+      apellido: apellido ?? this.apellido,
+      proveedor: proveedor ?? this.proveedor,
     );
   }
 
@@ -42,22 +47,24 @@ class UserModel {
 
     result.addAll({'userId': userId});
     result.addAll({'email': email});
-    result.addAll({'usuario': user});
-    result.addAll({'telefono': phone});
-    result.addAll({'nombre': name});
-    result.addAll({'apellido': lastName});
+    result.addAll({'usuario': usuario});
+    result.addAll({'telefono': telefono});
+    result.addAll({'nombre': nombre});
+    result.addAll({'apellido': apellido});
+    result.addAll({'proveedor': proveedor});
 
     return result;
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      map['userId'] ?? '',
-      map['email'] ?? '',
-      map['usuario'] ?? '',
-      map['telefono'] ?? '',
-      map['nombre'] ?? '',
-      map['apellido'] ?? '',
+      userId: map['userId'] ?? '',
+      email: map['email'] ?? '',
+      usuario: map['usuario'] ?? '',
+      telefono: map['telefono'] ?? '',
+      nombre: map['nombre'] ?? '',
+      apellido: map['apellido'] ?? '',
+      proveedor: map['proveedor'] ?? '',
     );
   }
 
@@ -67,7 +74,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, email: $email, usuario: $user, telefono: $phone, nombre: $name, apellido: $lastName)';
+    return 'UserModel(userId: $userId, email: $email, usuario: $usuario, telefono: $telefono, nombre: $nombre, apellido: $apellido, proveedor: $proveedor)';
   }
 
   @override
@@ -77,14 +84,15 @@ class UserModel {
     return other is UserModel &&
         other.userId == userId &&
         other.email == email &&
-        other.user == user &&
-        other.phone == phone &&
-        other.name == name &&
-        other.lastName == lastName;
+        other.usuario == usuario &&
+        other.telefono == telefono &&
+        other.nombre == nombre &&
+        other.apellido == apellido &&
+        other.proveedor == proveedor;
   }
 
   @override
   int get hashCode {
-    return userId.hashCode ^ email.hashCode ^ user.hashCode ^ phone.hashCode ^ name.hashCode ^ lastName.hashCode;
+    return userId.hashCode ^ email.hashCode ^ usuario.hashCode ^ telefono.hashCode ^ nombre.hashCode ^ apellido.hashCode ^ proveedor.hashCode;
   }
 }

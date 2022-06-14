@@ -113,7 +113,7 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
     controller?.animateToPage(
       index,
       duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
+      curve: Curves.linear,
     );
     setState(() {
       paginaSeleccionada = index;

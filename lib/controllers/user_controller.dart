@@ -9,10 +9,8 @@ final userProvider = ChangeNotifierProvider<UserController>((ref) => UserControl
 class UserController with ChangeNotifier {
   String _password = '';
   Map<String, dynamic>? _userData;
-  List<Map<String, dynamic>?> _integrantes = <Map<String, dynamic>?>[];
   String get password => _password;
   Map<String, dynamic>? get userData => _userData;
-  List<Map<String, dynamic>?> get integrantes => _integrantes;
 
   get users => null;
   set password(String value) {
@@ -43,53 +41,49 @@ class UserController with ChangeNotifier {
   }
 
   Future<void> getUserData() async {
-    if (FirebaseAuth.instance.currentUser == null) {
-      print('user is null');
-    } else {
-      switch (FirebaseAuth.instance.currentUser?.providerData.first.providerId) {
-        case 'facebook.com':
-          Map<String, dynamic>? facebookData = {};
-          try {
-            facebookData = await FacebookAuth.instance.getUserData();
-            print(facebookData);
-            print('facebookPhoto ${facebookData == null ? null : facebookData["picture"]["data"]["url"]}');
-          } catch (e) {
-            facebookData = null;
-          }
+    switch (FirebaseAuth.instance.currentUser?.providerData.first.providerId) {
+      case 'facebook.com':
+        Map<String, dynamic>? facebookData = {};
+        try {
+          facebookData = await FacebookAuth.instance.getUserData();
+          // ignore: prefer_if_null_operators
+          facebookData["picture"]["data"]["url"] == null ? null : facebookData["picture"]["data"]["url"];
+        } catch (e) {
+          facebookData = null;
+        }
 
-          final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
-          Map<String, dynamic> userInfoMap = {
-            'email': userInfo?.email,
-            'nombre': userInfo?.displayName,
-            'apellido': '',
-            'photoURL': facebookData == null ? null : facebookData["picture"]["data"]["url"],
-            'telefono': userInfo?.phoneNumber,
-            'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
-            'provider': 'facebook'
-          };
-          _userData = userInfoMap;
-          break;
-        case 'google.com':
-          final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
-          Map<String, dynamic> userInfoMap = {
-            'email': userInfo?.email,
-            'nombre': userInfo?.displayName,
-            'apellido': '',
-            'photoURL': userInfo?.photoURL,
-            'telefono': userInfo?.phoneNumber,
-            'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
-            'provider': 'google'
-          };
-          _userData = userInfoMap;
-          break;
-        case 'password':
-          final uid = FirebaseAuth.instance.currentUser!.uid;
-          final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-          _userData = snapshot.data() as Map<String, dynamic>;
-          _userData!['provider'] = 'password';
-          break;
-        default:
-      }
+        final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
+        Map<String, dynamic> userInfoMap = {
+          'email': userInfo?.email,
+          'nombre': userInfo?.displayName,
+          'apellido': '',
+          'photoURL': facebookData == null ? null : facebookData["picture"]["data"]["url"],
+          'telefono': userInfo?.phoneNumber,
+          'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
+          'provider': 'facebook'
+        };
+        _userData = userInfoMap;
+        break;
+      case 'google.com':
+        final userInfo = FirebaseAuth.instance.currentUser?.providerData.first;
+        Map<String, dynamic> userInfoMap = {
+          'email': userInfo?.email,
+          'nombre': userInfo?.displayName,
+          'apellido': '',
+          'photoURL': userInfo?.photoURL,
+          'telefono': userInfo?.phoneNumber,
+          'usuario': userInfo?.email?.substring(0, userInfo.email?.indexOf('@')),
+          'provider': 'google'
+        };
+        _userData = userInfoMap;
+        break;
+      case 'password':
+        final uid = FirebaseAuth.instance.currentUser!.uid;
+        final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        _userData = snapshot.data() as Map<String, dynamic>;
+        _userData!['provider'] = 'password';
+        break;
+      default:
     }
     notifyListeners();
   }
@@ -102,15 +96,5 @@ class UserController with ChangeNotifier {
       'nombre': name,
       'apellido': lastName,
     }, SetOptions(merge: true));
-  }
-
-  Future<void> getIntegrantes(List<dynamic> lIntegrantes) async {
-    final List<Map<String, dynamic>?> integrantes = [];
-    for (var element in lIntegrantes) {
-      final integrante = await FirebaseFirestore.instance.collection('users').doc(element).get();
-      integrantes.add(integrante.data());
-    }
-    _integrantes = integrantes;
-    notifyListeners();
   }
 }

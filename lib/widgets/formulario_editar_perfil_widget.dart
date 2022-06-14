@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
-import 'package:programador_reuniones_flutter/widgets/confirm_password.dart';
 
 class FormularioEditarPerfilWidget extends ConsumerStatefulWidget {
   const FormularioEditarPerfilWidget(this.userData, this.switchIsEditingState, {super.key});
@@ -13,8 +12,6 @@ class FormularioEditarPerfilWidget extends ConsumerStatefulWidget {
 
 class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarPerfilWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _password = '';
   String _user = '';
   String _phone = '';
   String _name = '';
@@ -25,8 +22,11 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
       key: _formKey,
       child: Column(
         children: [
-					const Text('Editar datos',style: TextStyle(fontSize: 25),),
-					const SizedBox(height: 20),
+          const Text(
+            'Editar datos',
+            style: TextStyle(fontSize: 25),
+          ),
+          const SizedBox(height: 20),
           /*user */ TextFormField(
             initialValue: widget.userData['usuario'].toString(),
             key: const ValueKey('Nombreusuario'),
@@ -41,22 +41,6 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
               _user = value!.trim();
             },
           ),
-          // const SizedBox(height: 20),
-          // /*email */ TextFormField(
-          //   initialValue: widget.userData['email'].toString(),
-          //   key: const ValueKey('email'),
-          //   decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
-          //   keyboardType: TextInputType.emailAddress,
-          //   validator: (value) {
-          //     if (value!.isEmpty || !value.contains('@') || value.length < 5) {
-          //       return 'Debe ingresar un correo electronico valido.';
-          //     }
-          //     return null;
-          //   },
-          //   onSaved: (value) {
-          //     _email = value!.trim();
-          //   },
-          // ),
           const SizedBox(height: 20),
           Row(
             children: [

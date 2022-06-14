@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
-import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 
 class GroupDetailView extends ConsumerStatefulWidget {
@@ -15,23 +15,25 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
   @override
   void initState() {
     super.initState();
-    getGroupData();
-  }
-
-  getGroupData() async {
-    final a = await ref.read(groupProvider).getGroupById(widget.groupId);
-    await ref.read(userProvider).getIntegrantes(a!['integrantes']);
+    ref.read(groupProvider).getGroupById(widget.groupId);
   }
 
   @override
   Widget build(BuildContext context) {
     final group = ref.watch(groupProvider).groupData;
-    final integrantes = ref.watch(userProvider).integrantes;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: const AppBarWidget('Detalles del grupo'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.goNamed('editar', params: {'gid': widget.groupId!});
+        },
+        mini: true,
+        tooltip: 'Editar grupo',
+        child: const Icon(Icons.edit_note),
+      ),
       body: Center(
-        child: group == null || group['docId'] != widget.groupId
+        child: group.docId != widget.groupId
             ? const CircularProgressIndicator()
             : SingleChildScrollView(
                 child: Center(
@@ -44,7 +46,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Card(
                             elevation: 12,
-                            color: Theme.of(context).colorScheme.primaryVariant,
+                            color: Theme.of(context).colorScheme.primaryContainer,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
                               child: Row(
@@ -60,14 +62,14 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          group['nombre'],
+                                          group.nombre,
                                           style: textTheme.headline5,
                                           softWrap: true,
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
                                         ),
                                         const SizedBox(height: 10),
-                                        Text(group['descripcion'])
+                                        Text(group.descripcion)
                                       ],
                                     ),
                                   ),
@@ -101,10 +103,10 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                             height: 250,
                             child: ListView.separated(
                               // shrinkWrap: true,
-                              itemCount: integrantes.length,
+                              itemCount: group.integrantes.length,
                               itemBuilder: (context, index) => ListTile(
-                                title: Text(integrantes[index]!['nombre'] + " " + integrantes[index]!['apellido']),
-                                subtitle: Text(integrantes[index]!['email']),
+                                title: Text("${group.integrantes.elementAt(index).nombre} ${group.integrantes.elementAt(index).apellido}"),
+                                subtitle: Text(group.integrantes.elementAt(index).email),
                               ),
                               separatorBuilder: (context, index) => const Divider(),
                             ),
