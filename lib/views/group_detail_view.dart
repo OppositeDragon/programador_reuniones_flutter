@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,14 +25,16 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: const AppBarWidget('Detalles del grupo'),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.goNamed('editar', params: {'gid': widget.groupId!});
-        },
-        mini: true,
-        tooltip: 'Editar grupo',
-        child: const Icon(Icons.edit_note),
-      ),
+      floatingActionButton: FirebaseAuth.instance.currentUser!.uid != group.admin
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                context.goNamed('editar', params: {'gid': widget.groupId!});
+              },
+              mini: true,
+              tooltip: 'Editar grupo',
+              child: const Icon(Icons.edit_note),
+            ),
       body: Center(
         child: group.docId != widget.groupId
             ? const CircularProgressIndicator()
