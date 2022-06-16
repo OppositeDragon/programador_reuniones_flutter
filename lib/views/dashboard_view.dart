@@ -44,13 +44,13 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Flexible(flex: 6, child: Card(child: HorarioPersonalWidget())),
+                  const Flexible(flex: 6, child: Card(elevation: 4, clipBehavior: Clip.antiAlias, child: HorarioPersonalWidget())),
                   Flexible(
                     flex: 4,
                     child: Column(
                       children: const [
-                        Expanded(child: Card(child: HorasTrabajoWidget())),
-                        Expanded(child: Card(child: GruposPersonal())),
+                        Expanded(child: Card(elevation: 4, child: HorasTrabajoWidget())),
+                        Expanded(child: Card(elevation: 4, child: GruposPersonal())),
                       ],
                     ),
                   )
@@ -63,9 +63,9 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: const [
-                  Flexible(flex: 6, fit: FlexFit.tight, child: Card(child: HorarioPersonalWidget())),
-                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(child: HorasTrabajoWidget())),
-                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(child: GruposPersonal()))
+                  Flexible(flex: 6, fit: FlexFit.tight, child: Card(elevation: 4, clipBehavior: Clip.antiAlias, child: HorarioPersonalWidget())),
+                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(elevation: 4, child: HorasTrabajoWidget())),
+                  Flexible(flex: 4, fit: FlexFit.tight, child: Card(elevation: 4, child: GruposPersonal()))
                 ],
               ),
             );
