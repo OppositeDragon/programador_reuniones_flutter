@@ -23,11 +23,12 @@ class SemanaHorarioPersonalModel {
     required this.J,
     required this.V,
     required this.S,
-  }){isSet = false;
+  }) {
+    isSet = false;
     if (D.isActive() || L.isActive() || M.isActive() || X.isActive() || J.isActive() || V.isActive() || S.isActive()) {
       isSet = true;
-    }}
- 
+    }
+  }
 
   SemanaHorarioPersonalModel copyWith({
     String? uid,
@@ -53,7 +54,7 @@ class SemanaHorarioPersonalModel {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'uid': uid});
     result.addAll({'isSet': isSet});
     result.addAll({'D': D.toMap()});
@@ -63,7 +64,7 @@ class SemanaHorarioPersonalModel {
     result.addAll({'J': J.toMap()});
     result.addAll({'V': V.toMap()});
     result.addAll({'S': S.toMap()});
-  
+
     return result;
   }
 
@@ -92,30 +93,22 @@ class SemanaHorarioPersonalModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is SemanaHorarioPersonalModel &&
-      other.uid == uid &&
-      other.isSet == isSet &&
-      other.D == D &&
-      other.L == L &&
-      other.M == M &&
-      other.X == X &&
-      other.J == J &&
-      other.V == V &&
-      other.S == S;
+        other.uid == uid &&
+        other.isSet == isSet &&
+        other.D == D &&
+        other.L == L &&
+        other.M == M &&
+        other.X == X &&
+        other.J == J &&
+        other.V == V &&
+        other.S == S;
   }
 
   @override
   int get hashCode {
-    return uid.hashCode ^
-      isSet.hashCode ^
-      D.hashCode ^
-      L.hashCode ^
-      M.hashCode ^
-      X.hashCode ^
-      J.hashCode ^
-      V.hashCode ^
-      S.hashCode;
+    return uid.hashCode ^ isSet.hashCode ^ D.hashCode ^ L.hashCode ^ M.hashCode ^ X.hashCode ^ J.hashCode ^ V.hashCode ^ S.hashCode;
   }
 }
 
@@ -152,15 +145,19 @@ class DiaHorarioPersonal {
     final result = <String, dynamic>{};
 
     result.addAll({'weekDay': weekDay.name});
-    result.addAll({'tiempos': tiempos.map((key, value) => MapEntry(key.start, value))});
+    result.addAll({'tiempos': tiempos.map((key, value) => MapEntry(key.start.toString(), value))});
 
     return result;
   }
 
   factory DiaHorarioPersonal.fromMap(Map<String, dynamic> map) {
+    final timesoltsString = map['tiempos'] as Map;
+    final Map<TimeSlot, bool> timeslots = timesoltsString.map(
+      (key, value) => MapEntry(TimeSlot.values.firstWhere((element) => element.start == key), value),
+    );
     return DiaHorarioPersonal(
       weekDay: WeekDays.values.firstWhere((element) => element.name == map['weekDay']),
-      tiempos: Map<TimeSlot, bool>.from(map['tiempos']),
+      tiempos: timeslots,
     );
   }
 
