@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/constants/constants.dart';
-import 'package:programador_reuniones_flutter/models/zoom_enum.dart';
+import 'package:programador_reuniones_flutter/controllers/timetable_controller.dart';
+import 'package:programador_reuniones_flutter/models/enums.dart';
+import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
 import 'package:programador_reuniones_flutter/painters/horario_painter.dart';
 
 class HorarioPersonalWidget extends ConsumerStatefulWidget {
@@ -31,107 +34,132 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(Zoom.values);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 30,
-              child: Row(
-                children: [
-                  const SizedBox(width: 40),
-                  for (int i = 0; i < Contstants.dias.length; i++) Flexible(flex: 2, child: Center(child: Text(Contstants.dias[i]))),
-                  const SizedBox(width: 6),
-                ],
+    return StreamBuilder(
+        stream: ref.read(timetableProvider).getTimetable(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Algo ha salido mal ${snapshot.error}');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data?.data() == null) {
+            return Center(
+              child: Text(
+                'Aun no ha creado un horario personal',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-            SizedBox(
-              height: constraints.maxHeight - 31,
-              child: Stack(
+            );
+          }
+          if (snapshot.data?.data() != null && snapshot.data!.data()!.isEmpty) {
+            return Center(
+              child: Text(
+                'Aun no tienes grupos',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            );
+          }
+					final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
+          
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
                 children: [
-                  SingleChildScrollView(
-                    primary: false,
-                    child: HorarioPersonalPainter(constraints.maxWidth, height),
+                  SizedBox(
+                    height: 30,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 40),
+                        for (int i = 0; i < Contstants.dias.length; i++) Flexible(flex: 2, child: Center(child: Text(Contstants.dias[i]))),
+                        const SizedBox(width: 6),
+                      ],
+                    ),
                   ),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 12),
-                        width: 30,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 2,
-                              style: BorderStyle.solid,
-                            ),
-                            borderRadius: BorderRadius.circular(4)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            // SizedBox.square(
-                            //   dimension: 28,
-                            //   child:
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () => setState(() => height = zoom(true)),
-                              child: Icon(
-                                Icons.zoom_in_rounded,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                // ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
+                  SizedBox(
+                    height: constraints.maxHeight - 31,
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          primary: false,
+                          child: HorarioPersonalPainter(constraints.maxWidth, height,horarioSemanal),
+                        ),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 12),
+                              width: 40,
+                              height: 76,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
                                   border: Border.all(
                                     color: Theme.of(context).colorScheme.primary,
-                                    width: 1,
+                                    width: 2,
                                     style: BorderStyle.solid,
                                   ),
-                                ),
-                              ),
-                            ),
-                            // SizedBox.square(
-                            //   dimension: 28,
-                            //   child:
+                                  borderRadius: BorderRadius.circular(4)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // SizedBox.square(
+                                  //   dimension: 28,
+                                  //   child:
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () => setState(() => height = zoom(true)),
+                                    child: Icon(
+                                      Icons.zoom_in_rounded,
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                      // ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 40,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          width: 1,
+                                          style: BorderStyle.solid,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
 
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () => setState(() => height = zoom(false)),
-                              child: Icon(
-                                Icons.zoom_out_rounded,
-                                color: Theme.of(context).colorScheme.onPrimary,
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () => setState(() => height = zoom(false)),
+                                    child: Icon(
+                                      Icons.zoom_out_rounded,
+                                      color: Theme.of(context).colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                  // ),
+                                ],
                               ),
-                            ),
+                            )
+                            // SizedBox(
+                            //   width: 40,
+                            //   height: 80,
+                            //   child: Column(
+                            //     children: [IconButton(onPressed: () {}, icon: Icon(Icons.add)), IconButton(onPressed: () {}, icon: Icon(Icons.remove))],
+                            //   ),
                             // ),
-                          ],
-                        ),
-                      )
-                      // SizedBox(
-                      //   width: 40,
-                      //   height: 80,
-                      //   child: Column(
-                      //     children: [IconButton(onPressed: () {}, icon: Icon(Icons.add)), IconButton(onPressed: () {}, icon: Icon(Icons.remove))],
-                      //   ),
-                      // ),
-                      )
+                            )
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
+              );
+            },
+          );
+        });
   }
 }
 
 class HorarioPersonalPainter extends StatefulWidget {
-  const HorarioPersonalPainter(this.width, this.height, {super.key});
-
+  const HorarioPersonalPainter(this.width, this.height, this.horarioSemanal, {super.key});
+final SemanaHorarioPersonalModel horarioSemanal;
   final double width;
   final double height;
   @override
@@ -139,19 +167,19 @@ class HorarioPersonalPainter extends StatefulWidget {
 }
 
 class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
-  GlobalKey gridKey = new GlobalKey();
+  GlobalKey gridKey = GlobalKey();
   void selectItem(GlobalKey<State<StatefulWidget>> gridItemKey, var details) {
-    RenderBox _boxItem = gridItemKey.currentContext!.findRenderObject()! as RenderBox;
-    final _boxMainGrid = gridKey.currentContext!.findRenderObject()! as RenderBox;
-    Offset position = _boxMainGrid.localToGlobal(Offset.zero); //this is global position
+    RenderBox boxItem = gridItemKey.currentContext!.findRenderObject()! as RenderBox;
+    final boxMainGrid = gridKey.currentContext!.findRenderObject()! as RenderBox;
+    Offset position = boxMainGrid.localToGlobal(Offset.zero); //this is global position
     double gridLeft = position.dx;
     double gridTop = position.dy;
 
     double gridPosition = details.globalPosition.dy - gridTop;
 
     //Get item position
-    int rowIndex = (gridPosition / _boxItem.size.width).floor().toInt();
-    int colIndex = ((details.globalPosition.dx - gridLeft) / _boxItem.size.width).floor().toInt();
+    int rowIndex = (gridPosition / boxItem.size.width).floor().toInt();
+    int colIndex = ((details.globalPosition.dx - gridLeft) / boxItem.size.width).floor().toInt();
     // gridState[rowIndex][colIndex] = "Y";
     print("rowIndex: $rowIndex, colIndex: $colIndex");
     //  setState(() {});
@@ -200,7 +228,7 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
         painter: HorarioPainter(
           primaryColor: theme.textTheme.bodyText1!.color!,
           brightness: theme.brightness,
-          update: drag,
+          update: drag,horarioSemanal:widget.horarioSemanal
         ),
       ),
     );
