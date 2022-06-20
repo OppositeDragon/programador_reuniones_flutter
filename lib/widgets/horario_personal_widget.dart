@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:programador_reuniones_flutter/constants/constants.dart';
 import 'package:programador_reuniones_flutter/controllers/timetable_controller.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
 import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
@@ -59,8 +58,8 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
               ),
             );
           }
-					final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
-          
+          final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
+
           return LayoutBuilder(
             builder: (context, constraints) {
               return Column(
@@ -70,7 +69,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
                     child: Row(
                       children: [
                         const SizedBox(width: 40),
-                        for (int i = 0; i < Contstants.dias.length; i++) Flexible(flex: 2, child: Center(child: Text(Contstants.dias[i]))),
+                        for (int i = 0; i < WeekDays.values.length; i++) Flexible(flex: 2, child: Center(child: Text(WeekDays.values[i].name))),
                         const SizedBox(width: 6),
                       ],
                     ),
@@ -81,7 +80,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
                       children: [
                         SingleChildScrollView(
                           primary: false,
-                          child: HorarioPersonalPainter(constraints.maxWidth, height,horarioSemanal),
+                          child: HorarioPersonalPainter(constraints.maxWidth, height, horarioSemanal),
                         ),
                         Align(
                             alignment: Alignment.centerRight,
@@ -159,7 +158,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
 
 class HorarioPersonalPainter extends StatefulWidget {
   const HorarioPersonalPainter(this.width, this.height, this.horarioSemanal, {super.key});
-final SemanaHorarioPersonalModel horarioSemanal;
+  final SemanaHorarioPersonalModel horarioSemanal;
   final double width;
   final double height;
   @override
@@ -226,9 +225,10 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
         key: gridKey,
         size: Size(widget.width - 10, widget.height),
         painter: HorarioPainter(
-          primaryColor: theme.textTheme.bodyText1!.color!,
+          theme: theme,
           brightness: theme.brightness,
-          update: drag,horarioSemanal:widget.horarioSemanal
+          update: drag,
+          horarioSemanal: widget.horarioSemanal,
         ),
       ),
     );
