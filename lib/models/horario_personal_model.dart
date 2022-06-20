@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-
 import 'package:programador_reuniones_flutter/models/enums.dart';
 
 class SemanaHorarioPersonalModel {
@@ -141,12 +140,11 @@ class DiaHorarioPersonal {
     );
   }
 
-  getChuncksOfTime() {
+  Map<String, String> getChuncksOfTime() {
     Map<String, String> chuncks = {};
     String prev = '';
     String current = '';
     //consolidate time slots with the true value
-    print('Timeslots: ${TimeSlot.h2345.start}');
     for (int i = 1; i < TimeSlot.values.length; i++) {
       if (tiempos[TimeSlot.values[i - 1]] == true && tiempos[TimeSlot.values[i]] == true) {
         if (prev == '') {
@@ -156,8 +154,8 @@ class DiaHorarioPersonal {
           current = TimeSlot.values[i].start;
         }
         if (i == TimeSlot.values.length - 1) {
-					 chuncks.addAll({prev: current});
-				}
+          chuncks.addAll({prev: current});
+        }
       } else if (tiempos[TimeSlot.values[i - 1]] == true && tiempos[TimeSlot.values[i]] == false) {
         if (prev == '') {
           prev = TimeSlot.values[i - 1].start;
@@ -171,7 +169,6 @@ class DiaHorarioPersonal {
           chuncks.addAll({prev: current});
         }
       }
-			
     }
     return chuncks;
   }
