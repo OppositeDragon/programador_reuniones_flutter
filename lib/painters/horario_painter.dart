@@ -2,16 +2,20 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:programador_reuniones_flutter/constants/constants.dart';
+import 'package:programador_reuniones_flutter/models/enums.dart';
+import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
 
 class HorarioPainter extends CustomPainter {
   final Color primaryColor;
   final ui.Brightness brightness;
-
+  final SemanaHorarioPersonalModel horarioSemanal;
   final Map<String, dynamic> update;
-  HorarioPainter({required this.primaryColor, required this.brightness, required this.update});
+  HorarioPainter({required this.primaryColor, required this.brightness, required this.update, required this.horarioSemanal});
 
   @override
   void paint(Canvas canvas, Size size) {
+    //
+    print('chuncksoftime: ${horarioSemanal.D.getChuncksOfTime()}');
 //calculate offsets
     const double bottomMargin = 10;
     const double leftMargin = 45;
