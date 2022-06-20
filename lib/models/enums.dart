@@ -1,5 +1,5 @@
 enum Zoom {
-  min(height: 778),
+  min(height: 682),
   midLow(height: 970),
   midHigh(height: 1258),
   max(height: 1642);
@@ -9,13 +9,13 @@ enum Zoom {
 }
 
 enum WeekDays {
-  D(diaCompleto: 'Domingo', numeroDia: 1),
-  L(diaCompleto: 'Lunes', numeroDia: 2),
-  M(diaCompleto: 'Martes', numeroDia: 3),
-  X(diaCompleto: 'Miércoles', numeroDia: 4),
-  J(diaCompleto: 'Jueves', numeroDia: 5),
-  V(diaCompleto: 'Viernes', numeroDia: 6),
-  S(diaCompleto: 'Sábado', numeroDia: 7);
+  D(numeroDia: 0, diaCompleto: 'Domingo'),
+  L(numeroDia: 1, diaCompleto: 'Lunes'),
+  M(numeroDia: 2, diaCompleto: 'Martes'),
+  X(numeroDia: 3, diaCompleto: 'Miércoles'),
+  J(numeroDia: 4, diaCompleto: 'Jueves'),
+  V(numeroDia: 5, diaCompleto: 'Viernes'),
+  S(numeroDia: 6, diaCompleto: 'Sábado');
 
   const WeekDays({required this.diaCompleto, required this.numeroDia});
   final String diaCompleto;
@@ -27,14 +27,14 @@ enum TimeSlot {
   h0015(i: 1, hour: 0, time: '00:15 - 00:30', start: '00:15', end: '00:30', timeOfDay: 'AM'),
   h0030(i: 2, hour: 0, time: '00:30 - 00:45', start: '00:30', end: '00:45', timeOfDay: 'AM'),
   h0045(i: 3, hour: 0, time: '00:45 - 01:00', start: '00:45', end: '01:00', timeOfDay: 'AM'),
-  h0100(i: 4, hour:1, time: '01:00 - 01:15', start: '01:00', end: '01:15', timeOfDay: 'AM'),
-  h0115(i: 5, hour:1, time: '01:15 - 01:30', start: '01:15', end: '01:30', timeOfDay: 'AM'),
-  h0130(i: 6, hour:1, time: '01:30 - 01:45', start: '01:30', end: '01:45', timeOfDay: 'AM'),
-  h0145(i: 7, hour:1, time: '01:45 - 02:00', start: '01:45', end: '02:00', timeOfDay: 'AM'),
+  h0100(i: 4, hour: 1, time: '01:00 - 01:15', start: '01:00', end: '01:15', timeOfDay: 'AM'),
+  h0115(i: 5, hour: 1, time: '01:15 - 01:30', start: '01:15', end: '01:30', timeOfDay: 'AM'),
+  h0130(i: 6, hour: 1, time: '01:30 - 01:45', start: '01:30', end: '01:45', timeOfDay: 'AM'),
+  h0145(i: 7, hour: 1, time: '01:45 - 02:00', start: '01:45', end: '02:00', timeOfDay: 'AM'),
   h0200(i: 8, hour: 2, time: '02:00 - 02:15', start: '02:00', end: '02:15', timeOfDay: 'AM'),
   h0215(i: 9, hour: 2, time: '02:15 - 02:30', start: '02:15', end: '02:30', timeOfDay: 'AM'),
-  h0230(i: 10, hour:2, time: '02:30 - 02:45', start: '02:30', end: '02:45', timeOfDay: 'AM'),
-  h0245(i: 11, hour:2, time: '02:45 - 03:00', start: '02:45', end: '03:00', timeOfDay: 'AM'),
+  h0230(i: 10, hour: 2, time: '02:30 - 02:45', start: '02:30', end: '02:45', timeOfDay: 'AM'),
+  h0245(i: 11, hour: 2, time: '02:45 - 03:00', start: '02:45', end: '03:00', timeOfDay: 'AM'),
   h0300(i: 12, hour: 3, time: '03:00 - 03:15', start: '03:00', end: '03:15', timeOfDay: 'AM'),
   h0315(i: 13, hour: 3, time: '03:15 - 03:30', start: '03:15', end: '03:30', timeOfDay: 'AM'),
   h0330(i: 14, hour: 3, time: '03:30 - 03:45', start: '03:30', end: '03:45', timeOfDay: 'AM'),
