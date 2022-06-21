@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 
 class FormularioEditarPerfilWidget extends ConsumerStatefulWidget {
@@ -23,17 +24,17 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
       child: Column(
         children: [
           const Text(
-            'Editar datos',
+            Strings.labelEditarDatos,
             style: TextStyle(fontSize: 25),
           ),
           const SizedBox(height: 20),
           /*user */ TextFormField(
             initialValue: widget.userData['usuario'].toString(),
             key: const ValueKey('Nombreusuario'),
-            decoration: const InputDecoration(labelText: "Nombre de usuario", border: OutlineInputBorder()),
+            decoration: const InputDecoration(labelText: Strings.labelUserName, border: OutlineInputBorder()),
             validator: (value) {
               if (value!.isEmpty || value.length < 4) {
-                return 'Debe tener al menos 4 caracteres';
+                return Strings.msgUserName;
               }
               return null;
             },
@@ -48,10 +49,10 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
                 child: TextFormField(
                   initialValue: widget.userData['nombre'].toString(),
                   key: const ValueKey('name'),
-                  decoration: const InputDecoration(labelText: "Nombre", border: OutlineInputBorder()),
+                  decoration: const InputDecoration(labelText: Strings.labelNombre, border: OutlineInputBorder()),
                   validator: (value) {
                     if (value!.isEmpty || value.length < 2) {
-                      return 'Debe tener al menos 2 caracteres';
+                      return Strings.msgNameLastCarac;
                     }
                     return null;
                   },
@@ -65,10 +66,10 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
                 child: /*lastName*/ TextFormField(
                   initialValue: widget.userData['apellido'].toString(),
                   key: const ValueKey('lastName'),
-                  decoration: const InputDecoration(labelText: "Apellido", border: OutlineInputBorder()),
+                  decoration: const InputDecoration(labelText: Strings.labelApellido, border: OutlineInputBorder()),
                   validator: (value) {
                     if (value!.isEmpty || value.length < 2) {
-                      return 'Debe tener al menos 2 caracteres';
+                      return Strings.msgNameLastCarac;
                     }
                     return null;
                   },
@@ -84,10 +85,10 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
             initialValue: widget.userData['telefono'].toString(),
             key: const ValueKey('phone'),
             keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(labelText: "Numero de telefono", border: OutlineInputBorder()),
+            decoration: const InputDecoration(labelText: Strings.labelPhone, border: OutlineInputBorder()),
             validator: (value) {
               if (value!.isEmpty || value.length < 6) {
-                return 'Debe tener al menos 6 numeros';
+                return Strings.msgPhone;
               }
               return null;
             },
@@ -101,11 +102,11 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
             children: [
               ElevatedButton(
                 onPressed: widget.switchIsEditingState,
-                child: const Text('Cancelar'),
+                child: const Text(Strings.labelCancelar),
               ),
               ElevatedButton(
                 onPressed: _trySubmit,
-                child: const Text('Guardar cambios'),
+                child: const Text(Strings.labelGuardarCambios),
               ),
             ],
           ),
@@ -123,7 +124,7 @@ class _FormularioEditarPerfilWidgetState extends ConsumerState<FormularioEditarP
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Datos guardados'),
+            content: Text(Strings.labelDatosGuardados),
           ),
         );
       }
