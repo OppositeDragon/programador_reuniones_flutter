@@ -25,7 +25,8 @@ class HorarioPainter extends CustomPainter {
     // colors to be used
     final textColor = theme.textTheme.bodyText1!.color!;
     final hourLineColor = theme.brightness == ui.Brightness.dark ? const Color.fromRGBO(235, 235, 235, 0.8) : const Color.fromRGBO(45, 45, 45, 0.8);
-    final midHourLineColor =  theme.brightness == ui.Brightness.dark ? const Color.fromRGBO(160, 160, 160, 0.8) : const Color.fromRGBO(90, 90, 90, 0.8);
+    final midHourLineColor =
+        theme.brightness == ui.Brightness.dark ? const Color.fromRGBO(160, 160, 160, 0.8) : const Color.fromRGBO(90, 90, 90, 0.8);
     // instantiate paint objects
     final hourBrush = Paint()
       ..color = hourLineColor
@@ -76,7 +77,7 @@ class HorarioPainter extends CustomPainter {
       }
 
       final Offset startOffset = getStartOffset(leftMargin, hOffset, vOffset, startDX, startDY);
-      final Offset endOffset = getEndOffset(leftMargin, hOffset, vOffset, endDX, endDY);
+      final Offset endOffset = getEndOffset(leftMargin, hOffset, vOffset, endDX, endDY, size);
       final Rect rect = Rect.fromPoints(startOffset, endOffset);
 
       canvas.drawRRect(RRect.fromRectAndRadius(rect, radiusRRect), updateBrushFill);
@@ -178,19 +179,23 @@ class HorarioPainter extends CustomPainter {
     return ui.Offset(hSpace - hOffset, vSpace - vOffset + 2);
   }
 
-  ui.Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY) {
+  ui.Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY, Size size) {
     double hSpace = leftMargin + hOffset;
     double vSpace = vOffset;
-    int i = 0, j = 0;
-    while (endDX > hSpace) {
-      i++;
-      hSpace += hOffset;
+    if (endDX > size.width) {
+      hSpace = size.width;
+    } else {
+      while (endDX > hSpace) {
+        hSpace += hOffset;
+      }
     }
-    while (endDY > vSpace) {
-      j++;
-      vSpace += vOffset;
+    if (endDY > size.height - 10) {
+      vSpace = size.height - 10;
+    } else {
+      while (endDY > vSpace) {
+        vSpace += vOffset;
+      }
     }
-
     return ui.Offset(hSpace - 1, vSpace);
   }
 }

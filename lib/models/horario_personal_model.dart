@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
 
 class SemanaHorarioPersonalModel {
@@ -28,7 +29,16 @@ class SemanaHorarioPersonalModel {
       isSet = true;
     }
   }
-
+  selectionIntoTimeSlots({
+    required SemanaHorarioPersonalModel semanaHorario,
+    required Offset startOffset,
+    required Offset endOffset,
+    required double hOffset,
+    required double vOffset,
+    required Size size,
+  }) {
+		
+	}
   SemanaHorarioPersonalModel copyWith({
     String? uid,
     DiaHorarioPersonal? D,
@@ -130,16 +140,6 @@ class DiaHorarioPersonal {
     return false;
   }
 
-  DiaHorarioPersonal copyWith({
-    WeekDays? weekDay,
-    Map<TimeSlot, bool>? tiempos,
-  }) {
-    return DiaHorarioPersonal(
-      weekDay: weekDay ?? this.weekDay,
-      tiempos: tiempos ?? this.tiempos,
-    );
-  }
-
   Map<String, String> getChuncksOfTime() {
     Map<String, String> chuncks = {};
     String prev = '';
@@ -149,10 +149,9 @@ class DiaHorarioPersonal {
       if (tiempos[TimeSlot.values[i - 1]] == true && tiempos[TimeSlot.values[i]] == true) {
         if (prev == '') {
           prev = TimeSlot.values[i - 1].start;
-          current = TimeSlot.values[i].start;
-        } else {
-          current = TimeSlot.values[i].start;
         }
+        current = TimeSlot.values[i].start;
+
         if (i == TimeSlot.values.length - 1) {
           chuncks.addAll({prev: current});
         }
@@ -171,6 +170,16 @@ class DiaHorarioPersonal {
       }
     }
     return chuncks;
+  }
+
+  DiaHorarioPersonal copyWith({
+    WeekDays? weekDay,
+    Map<TimeSlot, bool>? tiempos,
+  }) {
+    return DiaHorarioPersonal(
+      weekDay: weekDay ?? this.weekDay,
+      tiempos: tiempos ?? this.tiempos,
+    );
   }
 
   Map<String, dynamic> toMap() {
