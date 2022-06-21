@@ -53,4 +53,6 @@ class Strings {
   static const String labelDatosGuardados = "Datos guardados";
   static const String msgNoGrupos = "Aún no tienes grupos";
   static const String labelMiembros = "Miembros";
+  static const String labelBuscarUsuario = "Buscar usuario";
+  static const String hintBuscar = "Puede buscar por email o nombre de usuario";
 }
