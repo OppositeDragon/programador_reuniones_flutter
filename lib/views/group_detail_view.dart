@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 
@@ -24,7 +25,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
     final group = ref.watch(groupProvider).groupData;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: const AppBarWidget('Detalles del grupo'),
+      appBar: const AppBarWidget(Strings.labelDetailGrupo),
       floatingActionButton: FirebaseAuth.instance.currentUser!.uid != group.admin
           ? null
           : FloatingActionButton(
@@ -32,7 +33,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                 context.goNamed('editar', params: {'gid': widget.groupId!});
               },
               mini: true,
-              tooltip: 'Editar grupo',
+              tooltip: Strings.labelEditarGrupo,
               child: const Icon(Icons.edit_note),
             ),
       body: Center(
@@ -82,7 +83,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           ),
                         ),
                         Text(
-                          'Horario grupal calculado:',
+                          Strings.labelHorarioCalculado,
                           style: textTheme.headline5,
                           textAlign: TextAlign.start,
                         ),
@@ -95,7 +96,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           ),
                         ),
                         Text(
-                          'Integrantes:',
+                          Strings.labelIntegrantes,
                           style: textTheme.headline5,
                           textAlign: TextAlign.start,
                         ),
