@@ -16,4 +16,8 @@ class Strings {
   static const String labelBuscar = "Buscar integrantes: ";
   static const String labelProcesando = "Procesando";
   static const String labelCancelar = "Cancelar";
+  static const String labelDashboard = "Dashboard";
+  static const String labelHorario = "Mi horario";
+  static const String labelHorarioJob = "Horas de trabajo";
+  static const String labelMisGrupos = "Mis grupos";
 }
