@@ -11,6 +11,11 @@ final timetableProvider = ChangeNotifierProvider<TimetableController>((ref) {
 });
 
 class TimetableController with ChangeNotifier {
+  int _diaInicio = 0;
+  int _diaFin = 0;
+  int _timeSlotInicio = 0;
+  int _timeSlotFin = 0;
+
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTimetable() {
     return FirebaseFirestore.instance.collection('timetables').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
   }
@@ -47,6 +52,9 @@ class TimetableController with ChangeNotifier {
       j++;
       vSpace += vOffset;
     } while (startDY > vSpace);
+    _diaInicio = i - 1;
+    _timeSlotInicio = j - 1;
+    print('getStartOffset: i: $i, j: $j');
 
     return Offset(hSpace - hOffset, vSpace - vOffset + 2);
   }
@@ -54,10 +62,12 @@ class TimetableController with ChangeNotifier {
   Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY, Size size) {
     double hSpace = leftMargin + hOffset;
     double vSpace = vOffset;
+    int k = 0, l = 0;
     if (endDX > size.width) {
       hSpace = size.width;
     } else {
       while (endDX > hSpace) {
+        k++;
         hSpace += hOffset;
       }
     }
@@ -65,9 +75,13 @@ class TimetableController with ChangeNotifier {
       vSpace = size.height - 10;
     } else {
       while (endDY > vSpace) {
+        l++;
         vSpace += vOffset;
       }
     }
+    _diaFin = k;
+    _timeSlotFin = l;
+    print('getEndOffset: hSpace: $hSpace, vSpace: $vSpace, i: $k, j: $l');
     return Offset(hSpace - 1, vSpace);
   }
 
@@ -76,10 +90,12 @@ class TimetableController with ChangeNotifier {
     required final Offset endDrag,
     required Size size,
     required bool finishedDragging,
+    required SemanaHorarioPersonalModel horarioSemana,
   }) {
     Map<String, Offset> update = {};
     final hOffset = (size.width - Contstants.leftMargin) / 7;
     final vOffset = (size.height - Contstants.bottomMargin) / 96;
+    print('vOffset: $vOffset, hOffset: $hOffset');
     double startDX = startDrag.dx;
     double startDY = startDrag.dy;
     double endDX = endDrag.dx;
@@ -92,10 +108,12 @@ class TimetableController with ChangeNotifier {
       startDY = endDY;
       endDY = startDrag.dy;
     }
-
     update['onLongPressStart'] = getStartOffset(Contstants.leftMargin, hOffset, vOffset, startDX, startDY);
     update['onLongPressEnd'] = getEndOffset(Contstants.leftMargin, hOffset, vOffset, endDX, endDY, size);
     print("calculateOffset -> update  $update, finishedDragging: $finishedDragging");
+    if (finishedDragging) {
+      print('_diaInicio: $_diaInicio, _diaFin: $_diaFin, _timeSlotInicio: $_timeSlotInicio, _timeSlotFin: $_timeSlotFin');
+    }
     return update;
   }
 }

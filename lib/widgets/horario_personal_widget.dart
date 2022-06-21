@@ -200,15 +200,22 @@ class _HorarioPersonalPainterState extends ConsumerState<HorarioPersonalPainter>
         //  setState(() {});
       },
       onLongPressMoveUpdate: (details) {
-        update = ref
-            .read(timetableProvider)
-            .calculateOffset(startDrag: drag['onLongPressStart']!, endDrag: details.localPosition, size: widget.size, finishedDragging: false);
+        update = ref.read(timetableProvider).calculateOffset(
+            startDrag: drag['onLongPressStart']!,
+            endDrag: details.localPosition,
+            size: widget.size,
+            finishedDragging: false,
+            horarioSemana: widget.horarioSemanal);
         setState(() => drag['onLongPressEnd'] = details.localPosition);
       },
       onLongPressEnd: (details) {
-        update = ref
-            .read(timetableProvider)
-            .calculateOffset(startDrag: drag['onLongPressStart']!, endDrag: details.localPosition, size: widget.size, finishedDragging: true);
+        update = ref.read(timetableProvider).calculateOffset(
+              startDrag: drag['onLongPressStart']!,
+              endDrag: details.localPosition,
+              size: widget.size,
+              finishedDragging: true,
+              horarioSemana: widget.horarioSemanal,
+            );
         drag['onLongPressEnd'] = details.localPosition;
         print(drag);
         HapticFeedback.vibrate();
