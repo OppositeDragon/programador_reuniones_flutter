@@ -45,4 +45,7 @@ class Strings {
   static const String labelOpCuenta2 = "Inicie sesión";
   static const String labelGoogle = "Continuar con Google";
   static const String labelFacebook = "Continuar con Facebook";
+  static const String labelPerfil = "Perfil";
+  static const String labelActualizarDatos = "Actualizar datos";
+  static const String labelEditarDatos = "Editar datos";
 }
