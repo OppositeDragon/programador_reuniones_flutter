@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 import 'package:programador_reuniones_flutter/models/user_model.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
@@ -34,7 +35,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
     _nombreTextController.value = TextEditingValue(text: grupoDataTemp.nombre);
     _descripcionTextController.value = TextEditingValue(text: grupoDataTemp.descripcion);
     return Scaffold(
-      appBar: AppBarWidget(widget.groupId == 'nuevo' ? 'Crear grupo' : 'Editar grupo'),
+      appBar: AppBarWidget(widget.groupId == 'nuevo' ? Strings.labelGrupo : Strings.labelEditarGrupo),
       body: grupoDataTemp.docId != widget.groupId && widget.groupId != 'nuevo'
           ? const Center(child: CircularProgressIndicator())
           : FirebaseAuth.instance.currentUser!.uid != grupoDataTemp.admin
@@ -45,17 +46,17 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                       mainAxisSize: MainAxisSize.min,
 											crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                         Text(' Solo el administrador del grupo puede editarlo ',style: Theme.of(context).textTheme.displaySmall,textAlign: TextAlign.center,),
+                         Text( Strings.msgAdmin, style: Theme.of(context).textTheme.displaySmall,textAlign: TextAlign.center,),
                         const SizedBox(height:80),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             OutlinedButton(
                               onPressed: () => context.go('/'),
-                              child: const Text('Volver a inicio'),
+                              child: const Text(Strings.buttonReturnInicio),
                             ),
                             OutlinedButton(
                               onPressed: () => context.pop(),
-                              child: const Text('Detalle del grupo'),
+                              child: const Text(Strings.buttonDetailGrupo),
                             )
                           ],
                         )
@@ -74,14 +75,14 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                           children: [
                             TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "Nombre de grupo",
+                                labelText: Strings.labelNameGrupo,
                                 border: OutlineInputBorder(),
                               ),
                               controller: _nombreTextController,
                               keyboardType: TextInputType.name,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 4) {
-                                  return "Ingrese el nombre del grupo";
+                                  return Strings.msgNameGrupo;
                                 }
                                 return null;
                               },
@@ -95,7 +96,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                             const SizedBox(height: 12),
                             TextFormField(
                               decoration: const InputDecoration(
-                                labelText: "Descripcion de grupo",
+                                labelText: Strings.labelDescGrupo,
                                 border: OutlineInputBorder(),
                               ),
                               controller: _descripcionTextController,
@@ -104,7 +105,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                               keyboardType: TextInputType.multiline,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 10) {
-                                  return "Ingrese descripcion del grupo (minimo 10 caracteres)";
+                                  return Strings.msgDescGrupo;
                                 }
                                 return null;
                               },
@@ -120,7 +121,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                               height: 50,
                               child: VerticalDivider(width: 2),
                             ),
-                            const Text('Buscar integrantes: '),
+                            const Text(Strings.labelBuscar),
                             IconButton(
                               onPressed: () async {
                                 final UserModel? user = await showDialog(
@@ -181,7 +182,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                     if (_formKey.currentState!.validate()) {
                                       _formKey.currentState!.save();
                                       ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Procesando'), duration: Duration(milliseconds: 1500)),
+                                        const SnackBar(content: Text(Strings.labelProcesando), duration: Duration(milliseconds: 1500)),
                                       );
                                       String newGroupId = '';
                                       if (widget.groupId == 'nuevo') {
@@ -212,7 +213,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                                     child: Text(
-                                      widget.groupId == 'nuevo' ? "Crear grupo" : 'Editar grupo',
+                                      widget.groupId == 'nuevo'  ? Strings.labelGrupo : Strings.labelEditarGrupo,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -224,7 +225,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                   child: const Padding(
                                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                                     child: Text(
-                                      "Cancelar",
+                                      Strings.labelCancelar,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
