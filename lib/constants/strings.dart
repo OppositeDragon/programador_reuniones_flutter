@@ -20,4 +20,7 @@ class Strings {
   static const String labelHorario = "Mi horario";
   static const String labelHorarioJob = "Horas de trabajo";
   static const String labelMisGrupos = "Mis grupos";
+  static const String labelDetailGrupo = "Detalles del grupo";
+  static const String labelHorarioCalculado = "Horario grupal calculado:";
+  static const String labelIntegrantes = "Integrantes:";
 }
