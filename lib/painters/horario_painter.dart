@@ -6,15 +6,13 @@ import 'package:programador_reuniones_flutter/models/enums.dart';
 import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
 
 class HorarioPainter extends CustomPainter {
-  final ui.Brightness brightness;
+  final SemanaHorarioPersonalModel horarioSemanal;
   final ThemeData theme;
   final Map<String, Offset> update;
-  final SemanaHorarioPersonalModel horarioSemanal;
   HorarioPainter({
-    required this.brightness,
+    required this.horarioSemanal,
     required this.theme,
     required this.update,
-    required this.horarioSemanal,
   });
 
   @override
@@ -26,8 +24,8 @@ class HorarioPainter extends CustomPainter {
     final vOffset = (size.height - bottomMargin) / 96;
     // colors to be used
     final textColor = theme.textTheme.bodyText1!.color!;
-    final hourLineColor = brightness == ui.Brightness.dark ? const Color.fromRGBO(235, 235, 235, 0.8) : const Color.fromRGBO(45, 45, 45, 0.8);
-    final midHourLineColor = brightness == ui.Brightness.dark ? const Color.fromRGBO(160, 160, 160, 0.8) : const Color.fromRGBO(90, 90, 90, 0.8);
+    final hourLineColor = theme.brightness == ui.Brightness.dark ? const Color.fromRGBO(235, 235, 235, 0.8) : const Color.fromRGBO(45, 45, 45, 0.8);
+    final midHourLineColor =  theme.brightness == ui.Brightness.dark ? const Color.fromRGBO(160, 160, 160, 0.8) : const Color.fromRGBO(90, 90, 90, 0.8);
     // instantiate paint objects
     final hourBrush = Paint()
       ..color = hourLineColor
@@ -50,35 +48,39 @@ class HorarioPainter extends CustomPainter {
       ..style = ui.PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2;
+    final updateBrushFill = Paint()..color = theme.colorScheme.primary.withOpacity(0.65);
+    final updateBrushStroke = Paint()
+      ..color = theme.colorScheme.primary.withOpacity(0.85)
+      ..style = ui.PaintingStyle.stroke
+      ..strokeWidth = 3;
     final timeBrush2 = Paint()..color = theme.colorScheme.secondary.withOpacity(0.3);
     const radiusRRect = Radius.circular(3);
 
 //
-    final updateBrush = Paint()
-      ..color = Colors.indigo.shade900.withOpacity(0.5)
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 3;
+
     print('${update['onLongPressStart']} ${update['onLongPressEnd']}');
 
     // draw drag update
     if (update['onLongPressStart'] != null && update['onLongPressEnd'] != null) {
-       double startDX = update['onLongPressStart']!.dx;
-       double startDY = update['onLongPressStart']!.dy;
-       double endDX = update['onLongPressEnd']!.dx;
-       double endDY = update['onLongPressEnd']!.dy;
+      double startDX = update['onLongPressStart']!.dx;
+      double startDY = update['onLongPressStart']!.dy;
+      double endDX = update['onLongPressEnd']!.dx;
+      double endDY = update['onLongPressEnd']!.dy;
       if (startDX > endDX) {
         startDX = endDX;
-				endDX = update['onLongPressStart']!.dx;
+        endDX = update['onLongPressStart']!.dx;
       }
-			if (startDY > endDY) {
-			  startDY = endDY;
-				endDY = update['onLongPressStart']!.dy;
-			}
+      if (startDY > endDY) {
+        startDY = endDY;
+        endDY = update['onLongPressStart']!.dy;
+      }
 
       final Offset startOffset = getStartOffset(leftMargin, hOffset, vOffset, startDX, startDY);
-      final Offset endOffset = getEndOffset(leftMargin, hOffset, vOffset, endDX, endDY, startOffset);
+      final Offset endOffset = getEndOffset(leftMargin, hOffset, vOffset, endDX, endDY);
+      final Rect rect = Rect.fromPoints(startOffset, endOffset);
 
-      canvas.drawRect(Rect.fromPoints(startOffset, endOffset), updateBrush);
+      canvas.drawRRect(RRect.fromRectAndRadius(rect, radiusRRect), updateBrushFill);
+      canvas.drawRRect(RRect.fromRectAndRadius(rect, radiusRRect), updateBrushStroke);
     }
     //
     //text configuration
@@ -132,18 +134,8 @@ class HorarioPainter extends CustomPainter {
         final double dy1 = TimeSlot.values.firstWhere((timesSlot) => timesSlot.start == element.key).i * vOffset;
         final double dy2 = TimeSlot.values.firstWhere((timesSlot) => timesSlot.start == element.value).i * vOffset + vOffset;
         final Rect rect = Rect.fromPoints(Offset(dx + 1, dy1 + 2.5), Offset(dx + hOffset - 2, dy2 - 0.5));
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-              rect,
-              radiusRRect,
-            ),
-            timeBrush2);
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-              rect,
-              radiusRRect,
-            ),
-            timeBrush);
+        canvas.drawRRect(RRect.fromRectAndRadius(rect, radiusRRect), timeBrush2);
+        canvas.drawRRect(RRect.fromRectAndRadius(rect, radiusRRect), timeBrush);
       }
       dx += hOffset;
     }
@@ -182,26 +174,23 @@ class HorarioPainter extends CustomPainter {
       j++;
       vSpace += vOffset;
     } while (startDY > vSpace);
-    print('i: $i, hspace: $hSpace, hoffset: $hOffset, j: $j, vspace: $vSpace, voffset: $vOffset');
 
-    return ui.Offset(hSpace - hOffset, vSpace - vOffset);
+    return ui.Offset(hSpace - hOffset, vSpace - vOffset + 2);
   }
 
-  ui.Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY, Offset startOffset) {
-    print('endDX: $endDX, endDY: $endDY, startOffset: $startOffset');
-    double hSpace = leftMargin+hOffset;
+  ui.Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY) {
+    double hSpace = leftMargin + hOffset;
     double vSpace = vOffset;
     int i = 0, j = 0;
-    do {
+    while (endDX > hSpace) {
       i++;
       hSpace += hOffset;
-    } while (endDX >hSpace );
-    do {
+    }
+    while (endDY > vSpace) {
       j++;
       vSpace += vOffset;
-    } while (endDY > vSpace );
-    print('end offset->   |i: $i, hspace: $hSpace, hoffset: $hOffset, j: $j, vspace: $vSpace, voffset: $vOffset');
+    }
 
-    return ui.Offset(hSpace, vSpace);
+    return ui.Offset(hSpace - 1, vSpace);
   }
 }

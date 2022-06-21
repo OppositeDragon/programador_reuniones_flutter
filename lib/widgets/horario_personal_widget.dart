@@ -225,10 +225,9 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
         key: gridKey,
         size: Size(widget.width, widget.height),
         painter: HorarioPainter(
-          theme: theme,
-          brightness: theme.brightness,
-          update: drag,
           horarioSemanal: widget.horarioSemanal,
+          theme: theme,
+          update: drag,
         ),
       ),
     );
