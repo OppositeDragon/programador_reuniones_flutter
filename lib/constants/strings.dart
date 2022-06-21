@@ -48,4 +48,5 @@ class Strings {
   static const String labelPerfil = "Perfil";
   static const String labelActualizarDatos = "Actualizar datos";
   static const String labelEditarDatos = "Editar datos";
+  static const String labelAceptar = "Aceptar";
 }
