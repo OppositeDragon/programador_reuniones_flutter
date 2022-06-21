@@ -8,7 +8,7 @@ import 'package:programador_reuniones_flutter/models/horario_personal_model.dart
 class HorarioPainter extends CustomPainter {
   final ui.Brightness brightness;
   final ThemeData theme;
-  final Map<String, dynamic> update;
+  final Map<String, Offset> update;
   final SemanaHorarioPersonalModel horarioSemanal;
   HorarioPainter({
     required this.brightness,
@@ -19,15 +19,16 @@ class HorarioPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-//calculate offsets
+    //calculate offsets
     const double bottomMargin = 10;
     const double leftMargin = 45;
     final hOffset = (size.width - leftMargin) / 7;
     final vOffset = (size.height - bottomMargin) / 96;
+    // colors to be used
     final textColor = theme.textTheme.bodyText1!.color!;
     final hourLineColor = brightness == ui.Brightness.dark ? const Color.fromRGBO(235, 235, 235, 0.8) : const Color.fromRGBO(45, 45, 45, 0.8);
     final midHourLineColor = brightness == ui.Brightness.dark ? const Color.fromRGBO(160, 160, 160, 0.8) : const Color.fromRGBO(90, 90, 90, 0.8);
-
+    // instantiate paint objects
     final hourBrush = Paint()
       ..color = hourLineColor
       ..strokeCap = StrokeCap.round
@@ -58,15 +59,33 @@ class HorarioPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 3;
     print('${update['onLongPressStart']} ${update['onLongPressEnd']}');
+
+    // draw drag update
     if (update['onLongPressStart'] != null && update['onLongPressEnd'] != null) {
-      canvas.drawRect(Rect.fromPoints(update['onLongPressStart'], update['onLongPressEnd']), updateBrush);
+       double startDX = update['onLongPressStart']!.dx;
+       double startDY = update['onLongPressStart']!.dy;
+       double endDX = update['onLongPressEnd']!.dx;
+       double endDY = update['onLongPressEnd']!.dy;
+      if (startDX > endDX) {
+        startDX = endDX;
+				endDX = update['onLongPressStart']!.dx;
+      }
+			if (startDY > endDY) {
+			  startDY = endDY;
+				endDY = update['onLongPressStart']!.dy;
+			}
+
+      final Offset startOffset = getStartOffset(leftMargin, hOffset, vOffset, startDX, startDY);
+      final Offset endOffset = getEndOffset(leftMargin, hOffset, vOffset, endDX, endDY, startOffset);
+
+      canvas.drawRect(Rect.fromPoints(startOffset, endOffset), updateBrush);
     }
     //
-//text
+    //text configuration
     final paragraphStyle = ui.ParagraphStyle(textDirection: TextDirection.ltr, textAlign: TextAlign.right);
     final textStyleBig = ui.TextStyle(color: textColor, fontSize: 11, fontWeight: FontWeight.w600);
     final textStyleSmall = ui.TextStyle(color: textColor, fontSize: 9);
-//draw the timetext
+    //draw the timetext
     for (var i = 0; i < Contstants.horasDia.length; i++) {
       final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
         ..pushStyle((i % 2 == 0) ? textStyleSmall : textStyleBig)
@@ -77,7 +96,7 @@ class HorarioPainter extends CustomPainter {
       canvas.drawParagraph(paragraph, (i % 2 == 0) ? Offset(0, dy) : Offset(0, dy - 2));
     }
 
-//draws the horizontal lines
+    //draws the horizontal lines
     canvas.drawLine(const Offset(44, 0.5), Offset(size.width, 0.5), hourBrush);
     for (int i = 1; i <= 96; i++) {
       final double dy = i * vOffset + 1;
@@ -113,7 +132,6 @@ class HorarioPainter extends CustomPainter {
         final double dy1 = TimeSlot.values.firstWhere((timesSlot) => timesSlot.start == element.key).i * vOffset;
         final double dy2 = TimeSlot.values.firstWhere((timesSlot) => timesSlot.start == element.value).i * vOffset + vOffset;
         final Rect rect = Rect.fromPoints(Offset(dx + 1, dy1 + 2.5), Offset(dx + hOffset - 2, dy2 - 0.5));
-        print('dy1: $dy1, dy2: $dy2');
         canvas.drawRRect(
             RRect.fromRectAndRadius(
               rect,
@@ -150,5 +168,40 @@ class HorarioPainter extends CustomPainter {
       // Update the starting X
       startX += dash + space;
     }
+  }
+
+  Offset getStartOffset(double leftMargin, double hOffset, double vOffset, double startDX, double startDY) {
+    double hSpace = leftMargin;
+    double vSpace = 0;
+    int i = 0, j = 0;
+    do {
+      i++;
+      hSpace += hOffset;
+    } while (startDX > hSpace);
+    do {
+      j++;
+      vSpace += vOffset;
+    } while (startDY > vSpace);
+    print('i: $i, hspace: $hSpace, hoffset: $hOffset, j: $j, vspace: $vSpace, voffset: $vOffset');
+
+    return ui.Offset(hSpace - hOffset, vSpace - vOffset);
+  }
+
+  ui.Offset getEndOffset(double leftMargin, double hOffset, double vOffset, double endDX, double endDY, Offset startOffset) {
+    print('endDX: $endDX, endDY: $endDY, startOffset: $startOffset');
+    double hSpace = leftMargin+hOffset;
+    double vSpace = vOffset;
+    int i = 0, j = 0;
+    do {
+      i++;
+      hSpace += hOffset;
+    } while (endDX >hSpace );
+    do {
+      j++;
+      vSpace += vOffset;
+    } while (endDY > vSpace );
+    print('end offset->   |i: $i, hspace: $hSpace, hoffset: $hOffset, j: $j, vspace: $vSpace, voffset: $vOffset');
+
+    return ui.Offset(hSpace, vSpace);
   }
 }

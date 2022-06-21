@@ -53,7 +53,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
           if (snapshot.data?.data() != null && snapshot.data!.data()!.isEmpty) {
             return Center(
               child: Text(
-                'Aun no tienes grupos',
+                'Es necesario que cree un horario personal',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             );
@@ -80,7 +80,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
                       children: [
                         SingleChildScrollView(
                           primary: false,
-                          child: HorarioPersonalPainter(constraints.maxWidth, height, horarioSemanal),
+                          child: HorarioPersonalPainter(constraints.maxWidth-10, height, horarioSemanal),
                         ),
                         Align(
                             alignment: Alignment.centerRight,
@@ -184,7 +184,7 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
     //  setState(() {});
   }
 
-  Map<String, dynamic> drag = {};
+  Map<String, Offset> drag = {};
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +223,7 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
       // },
       child: CustomPaint(
         key: gridKey,
-        size: Size(widget.width - 10, widget.height),
+        size: Size(widget.width, widget.height),
         painter: HorarioPainter(
           theme: theme,
           brightness: theme.brightness,
