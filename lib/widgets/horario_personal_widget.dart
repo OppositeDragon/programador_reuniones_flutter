@@ -80,7 +80,7 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
                       children: [
                         SingleChildScrollView(
                           primary: false,
-                          child: HorarioPersonalPainter(constraints.maxWidth-10, height, horarioSemanal),
+                          child: HorarioPersonalPainter(Size(constraints.maxWidth - 10, height), horarioSemanal),
                         ),
                         Align(
                             alignment: Alignment.centerRight,
@@ -156,16 +156,15 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
   }
 }
 
-class HorarioPersonalPainter extends StatefulWidget {
-  const HorarioPersonalPainter(this.width, this.height, this.horarioSemanal, {super.key});
+class HorarioPersonalPainter extends ConsumerStatefulWidget {
+  const HorarioPersonalPainter(this.size, this.horarioSemanal, {super.key});
   final SemanaHorarioPersonalModel horarioSemanal;
-  final double width;
-  final double height;
+  final Size size;
   @override
-  State<HorarioPersonalPainter> createState() => _HorarioPersonalPainterState();
+  ConsumerState<HorarioPersonalPainter> createState() => _HorarioPersonalPainterState();
 }
 
-class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
+class _HorarioPersonalPainterState extends ConsumerState<HorarioPersonalPainter> {
   GlobalKey gridKey = GlobalKey();
   void selectItem(GlobalKey<State<StatefulWidget>> gridItemKey, var details) {
     RenderBox boxItem = gridItemKey.currentContext!.findRenderObject()! as RenderBox;
@@ -185,7 +184,7 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
   }
 
   Map<String, Offset> drag = {};
-
+  Map<String, Offset> update = {};
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -195,19 +194,21 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
       //   print('details: localPosition${details.localPosition} globalPosition:${details.globalPosition}, kind:${details.kind}');
       // },
       onLongPressStart: (details) {
-        print('onLongPressStart: localPosition${details.localPosition} globalPosition:${details.globalPosition}');
         drag['onLongPressStart'] = details.localPosition;
         HapticFeedback.mediumImpact();
 
         //  setState(() {});
       },
       onLongPressMoveUpdate: (details) {
-        setState(() {
-          drag['onLongPressEnd'] = details.localPosition;
-        });
+        update = ref
+            .read(timetableProvider)
+            .calculateOffset(startDrag: drag['onLongPressStart']!, endDrag: details.localPosition, size: widget.size, finishedDragging: false);
+        setState(() => drag['onLongPressEnd'] = details.localPosition);
       },
       onLongPressEnd: (details) {
-        print('onLongPressEnd: localPosition${details.localPosition} globalPosition:${details.globalPosition}, kind:${details.velocity}');
+        update = ref
+            .read(timetableProvider)
+            .calculateOffset(startDrag: drag['onLongPressStart']!, endDrag: details.localPosition, size: widget.size, finishedDragging: true);
         drag['onLongPressEnd'] = details.localPosition;
         print(drag);
         HapticFeedback.vibrate();
@@ -223,11 +224,11 @@ class _HorarioPersonalPainterState extends State<HorarioPersonalPainter> {
       // },
       child: CustomPaint(
         key: gridKey,
-        size: Size(widget.width, widget.height),
+        size: widget.size,
         painter: HorarioPainter(
           horarioSemanal: widget.horarioSemanal,
           theme: theme,
-          update: drag,
+          update: update,
         ),
       ),
     );
