@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 
@@ -16,7 +17,7 @@ class ConfirmPasswordWidget extends ConsumerWidget {
           Consumer(
             builder: (context, ref, child) => TextField(
               key: const ValueKey('password'),
-              decoration: const InputDecoration(labelText: 'Clave', border: OutlineInputBorder()),
+              decoration: const InputDecoration(labelText: Strings.labelClave, border: OutlineInputBorder()),
               obscureText: !showPassword,
               onChanged: (value) => ref.read(userProvider).password = value.trim(),
             ),
@@ -28,10 +29,10 @@ class ConfirmPasswordWidget extends ConsumerWidget {
                 value: showPassword,
                 onChanged: (bool? value) => ref.read(loginProvider).showPassword = value!,
               ),
-              const Text('Mostrar clave'),
+              const Text(Strings.labelMostrarClave),
             ],
           ),
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Aceptar'))
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text(Strings.labelAceptar))
         ],
       ),
     );
