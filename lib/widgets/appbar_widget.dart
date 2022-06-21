@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 import 'package:programador_reuniones_flutter/go_router.dart';
 import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
@@ -37,7 +38,7 @@ class PopUpMenu extends ConsumerWidget {
           if (router.location != '/perfil')
             PopupMenuItem(
               child: ListTile(
-                title: const Text('Perfil'),
+                title: const Text(Strings.buttonPerfil),
                 trailing: const Icon(Icons.account_circle),
                 onTap: () {
                   context.pushNamed('perfil');
@@ -46,7 +47,7 @@ class PopUpMenu extends ConsumerWidget {
             ),
           PopupMenuItem(
               child: ListTile(
-            title: const Text('Tema'),
+            title: const Text(Strings.buttonTema),
             trailing: const Icon(Icons.brightness_4_sharp),
             onTap: () {
               //isDark = !isDark;
@@ -55,7 +56,7 @@ class PopUpMenu extends ConsumerWidget {
           )),
           PopupMenuItem(
             child: ListTile(
-              title: const Text('Cerrar sesion'),
+              title: const Text(Strings.buttonCerrarSesion),
               trailing: const Icon(Icons.logout),
               onTap: () => ref.read(loginProvider).logout(),
             ),
