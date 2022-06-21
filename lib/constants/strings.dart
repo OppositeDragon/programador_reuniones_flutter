@@ -51,4 +51,6 @@ class Strings {
   static const String labelAceptar = "Aceptar";
   static const String labelGuardarCambios = "Guardar cambios";
   static const String labelDatosGuardados = "Datos guardados";
+  static const String msgNoGrupos = "Aún no tienes grupos";
+  static const String labelMiembros = "Miembros";
 }
