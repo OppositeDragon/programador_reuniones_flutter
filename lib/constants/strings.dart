@@ -23,4 +23,26 @@ class Strings {
   static const String labelDetailGrupo = "Detalles del grupo";
   static const String labelHorarioCalculado = "Horario grupal calculado:";
   static const String labelIntegrantes = "Integrantes:";
+  static const String labelIniciarSesion = "Iniciar sesión";
+  static const String labelCrearCuenta = "Crear cuenta";
+  static const String msgNameLastCarac = "Debe tener al menos 2 caracteres";
+  static const String labelNombre = "Nombre";
+  static const String labelApellido = "Apellido";
+  static const String msgUserName = "Debe tener al menos 4 caracteres";
+  static const String labelUserName = "Nombre de usuario";
+  static const String msgPhone = "Debe tener al menos 6 números";
+  static const String labelPhone = "Número de teléfono";
+  static const String labelEmail = "Email";
+  static const String msgEmail = "Debe ingresar un correo electrónico válido";
+  static const String msgPassword = "La clave tener al menos de 8 caracteres";
+  static const String labelClave = "Clave";
+  static const String msgPassword2 = "La clave no coincide";
+  static const String labelConfirmarClave = "Confirmar clave";
+  static const String labelMostrarClave = "Mostrar clave";
+  static const String labelQuesCuenta1 = "¿No tiene una cuenta?";
+  static const String labelQuesCuenta2 = "Ya tiene cuenta?";
+  static const String labelOpCuenta1 = "Cree una";
+  static const String labelOpCuenta2 = "Inicie sesión";
+  static const String labelGoogle = "Continuar con Google";
+  static const String labelFacebook = "Continuar con Facebook";
 }
