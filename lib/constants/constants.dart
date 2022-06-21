@@ -1,7 +1,12 @@
+import 'dart:ui';
+
 import 'package:programador_reuniones_flutter/models/enums.dart';
 
 class Contstants {
   Contstants._();
+  static const double bottomMargin = 10;
+  static const double leftMargin = 45;
+  static const Radius radiusRRect = Radius.circular(3);
   static const List<String> dias = ["L", "M", "X", "J", "V", "S", "D"];
   static const List<String> horasDia = [
     '00:30',
