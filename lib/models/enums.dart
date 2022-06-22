@@ -120,7 +120,14 @@ enum TimeSlot {
   h2330(i: 94, hour: 23, time: '23:30 - 23:45', start: '23:30', end: '23:45', timeOfDay: 'PM'),
   h2345(i: 95, hour: 23, time: '23:45 - 00:00', start: '23:45', end: '00:00', timeOfDay: 'PM');
 
-  const TimeSlot({required this.i, required this.time, required this.start, required this.end, required this.hour, required this.timeOfDay});
+  const TimeSlot({
+    required this.i,
+    required this.hour,
+    required this.time,
+    required this.start,
+    required this.end,
+    required this.timeOfDay,
+  });
   final int i;
   final int hour;
   final String time;
