@@ -34,125 +34,119 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: ref.read(timetableProvider).getTimetable(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Algo ha salido mal ${snapshot.error}');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.data?.data() == null) {
-            return Center(
-              child: Text(
-                'Aun no ha creado un horario personal',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            );
-          }
-          if (snapshot.data?.data() != null && snapshot.data!.data()!.isEmpty) {
-            return Center(
-              child: Text(
-                'Es necesario que cree un horario personal',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            );
-          }
-          final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
-
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 40),
-                        for (int i = 0; i < WeekDays.values.length; i++) Flexible(flex: 2, child: Center(child: Text(WeekDays.values[i].name))),
-                        const SizedBox(width: 6),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: constraints.maxHeight - 31,
-                    child: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          primary: false,
-                          child: HorarioPersonalPainter(Size(constraints.maxWidth - 10, height), horarioSemanal),
-                        ),
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 12),
-                              width: 40,
-                              height: 76,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
-                                  border: Border.all(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    width: 2,
-                                    style: BorderStyle.solid,
-                                  ),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // SizedBox.square(
-                                  //   dimension: 28,
-                                  //   child:
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () => setState(() => height = zoom(true)),
-                                    child: Icon(
-                                      Icons.zoom_in_rounded,
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      // ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 40,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Theme.of(context).colorScheme.primary,
-                                          width: 1,
-                                          style: BorderStyle.solid,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () => setState(() => height = zoom(false)),
-                                    child: Icon(
-                                      Icons.zoom_out_rounded,
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                    ),
-                                  ),
-                                  // ),
-                                ],
-                              ),
-                            )
-                            // SizedBox(
-                            //   width: 40,
-                            //   height: 80,
-                            //   child: Column(
-                            //     children: [IconButton(onPressed: () {}, icon: Icon(Icons.add)), IconButton(onPressed: () {}, icon: Icon(Icons.remove))],
-                            //   ),
-                            // ),
-                            )
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
+      stream: ref.read(timetableProvider).getTimetable(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Algo ha salido mal ${snapshot.error}');
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.data?.data() == null) {
+          return Center(
+            child: Text(
+              'Aun no ha creado un horario personal',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
           );
-        });
+        }
+        if (snapshot.data?.data() != null && snapshot.data!.data()!.isEmpty) {
+          return Center(
+            child: Text(
+              'Es necesario que cree un horario personal',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          );
+        }
+        final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: 30,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 40),
+                      for (int i = 0; i < WeekDays.values.length; i++) Flexible(flex: 2, child: Center(child: Text(WeekDays.values[i].name))),
+                      const SizedBox(width: 6),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: constraints.maxHeight - 31,
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        primary: false,
+                        child: HorarioPersonalPainter(Size(constraints.maxWidth - 10, height), horarioSemanal),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 12),
+                          width: 40,
+                          height: 76,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.onBackground,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // SizedBox.square(
+                              //   dimension: 28,
+                              //   child:
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => setState(() => height = zoom(true)),
+                                child: Icon(
+                                  Icons.zoom_in_rounded,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  // ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(context).colorScheme.onBackground,
+                                      width: 1,
+                                      style: BorderStyle.solid,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => setState(() => height = zoom(false)),
+                                child: Icon(
+                                  Icons.zoom_out_rounded,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                              ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -165,24 +159,7 @@ class HorarioPersonalPainter extends ConsumerStatefulWidget {
 }
 
 class _HorarioPersonalPainterState extends ConsumerState<HorarioPersonalPainter> {
-  GlobalKey gridKey = GlobalKey();
-  void selectItem(GlobalKey<State<StatefulWidget>> gridItemKey, var details) {
-    RenderBox boxItem = gridItemKey.currentContext!.findRenderObject()! as RenderBox;
-    final boxMainGrid = gridKey.currentContext!.findRenderObject()! as RenderBox;
-    Offset position = boxMainGrid.localToGlobal(Offset.zero); //this is global position
-    double gridLeft = position.dx;
-    double gridTop = position.dy;
-
-    double gridPosition = details.globalPosition.dy - gridTop;
-
-    //Get item position
-    int rowIndex = (gridPosition / boxItem.size.width).floor().toInt();
-    int colIndex = ((details.globalPosition.dx - gridLeft) / boxItem.size.width).floor().toInt();
-    // gridState[rowIndex][colIndex] = "Y";
-    print("rowIndex: $rowIndex, colIndex: $colIndex");
-    //  setState(() {});
-  }
-
+  GlobalKey<_HorarioPersonalPainterState> gridKey = GlobalKey<_HorarioPersonalPainterState>();
   Map<String, Offset> drag = {};
   Map<String, Offset> update = {};
   @override
@@ -190,14 +167,9 @@ class _HorarioPersonalPainterState extends ConsumerState<HorarioPersonalPainter>
     final theme = Theme.of(context);
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      // onTapDown: (details) {
-      //   print('details: localPosition${details.localPosition} globalPosition:${details.globalPosition}, kind:${details.kind}');
-      // },
       onLongPressStart: (details) {
         drag['onLongPressStart'] = details.localPosition;
         HapticFeedback.mediumImpact();
-
-        //  setState(() {});
       },
       onLongPressMoveUpdate: (details) {
         update = ref.read(timetableProvider).calculateOffset(
@@ -217,18 +189,11 @@ class _HorarioPersonalPainterState extends ConsumerState<HorarioPersonalPainter>
               horarioSemana: widget.horarioSemanal,
             );
         drag['onLongPressEnd'] = details.localPosition;
-        print(drag);
+        final horarioSemanalMutado = ref.read(timetableProvider).mutateHorarioSemana(widget.horarioSemanal);
+        ref.read(timetableProvider).updateHorarioSemanal(horarioSemanalMutado);
         HapticFeedback.vibrate();
-        setState(() {});
+        update = {};
       },
-      // onPanUpdate: (DragUpdateDetails details) {
-      //   print('onPanUpdate');
-      //   print(details.localPosition);
-      // },
-      // onLongPressMoveUpdate: (details) {
-      //   print(
-      //       'onLongPressMoveUpdate: localPosition${details.localPosition} globalPosition:${details.globalPosition}, localOffsetFromOrigin:${details.localOffsetFromOrigin} offsetFromOrigin: ${details.offsetFromOrigin}');
-      // },
       child: CustomPaint(
         key: gridKey,
         size: widget.size,

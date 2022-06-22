@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
 
 class SemanaHorarioPersonalModel {
@@ -29,16 +28,24 @@ class SemanaHorarioPersonalModel {
       isSet = true;
     }
   }
-  selectionIntoTimeSlots({
-    required SemanaHorarioPersonalModel semanaHorario,
-    required Offset startOffset,
-    required Offset endOffset,
-    required double hOffset,
-    required double vOffset,
-    required Size size,
-  }) {
-		
-	}
+
+  List<DiaHorarioPersonal> toListOfDays() {
+    return <DiaHorarioPersonal>[D, L, M, X, J, V, S];
+  }
+
+  SemanaHorarioPersonalModel fromListOfDays(List<DiaHorarioPersonal> days) {
+    return SemanaHorarioPersonalModel(
+      uid: uid,
+      D: days[0],
+      L: days[1],
+      M: days[2],
+      X: days[3],
+      J: days[4],
+      V: days[5],
+      S: days[6],
+    );
+  }
+
   SemanaHorarioPersonalModel copyWith({
     String? uid,
     DiaHorarioPersonal? D,

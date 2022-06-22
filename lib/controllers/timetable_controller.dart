@@ -36,7 +36,7 @@ class TimetableController with ChangeNotifier {
         );
   }
 
-  updateHorarioSemanal(SemanaHorarioPersonalModel horarioSemana) {
+  void updateHorarioSemanal(SemanaHorarioPersonalModel horarioSemana) {
     FirebaseFirestore.instance.collection("timetables").doc(FirebaseAuth.instance.currentUser!.uid).set(horarioSemana.toMap());
   }
 
@@ -110,10 +110,21 @@ class TimetableController with ChangeNotifier {
     }
     update['onLongPressStart'] = getStartOffset(Contstants.leftMargin, hOffset, vOffset, startDX, startDY);
     update['onLongPressEnd'] = getEndOffset(Contstants.leftMargin, hOffset, vOffset, endDX, endDY, size);
-    print("calculateOffset -> update  $update, finishedDragging: $finishedDragging");
-    if (finishedDragging) {
-      print('_diaInicio: $_diaInicio, _diaFin: $_diaFin, _timeSlotInicio: $_timeSlotInicio, _timeSlotFin: $_timeSlotFin');
-    }
     return update;
+  }
+
+  SemanaHorarioPersonalModel mutateHorarioSemana(SemanaHorarioPersonalModel horarioSemana) {
+    final listaDias = horarioSemana.toListOfDays();
+    int k = -1;
+    bool newState = false;
+    for (int i = _diaInicio; i <= _diaFin; i++) {
+      for (int j = _timeSlotInicio; j <= _timeSlotFin; j++) {
+        if (i == _diaInicio && j == _timeSlotInicio) {
+          newState = listaDias[i].tiempos[TimeSlot.values[j]]!;
+        }
+        listaDias[i].tiempos[TimeSlot.values[j]] = !newState;
+      }
+    }
+    return horarioSemana.fromListOfDays(listaDias);
   }
 }
