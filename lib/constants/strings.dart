@@ -34,13 +34,13 @@ class Strings {
   static const String labelPhone = "Número de teléfono";
   static const String labelEmail = "Email";
   static const String msgEmail = "Debe ingresar un correo electrónico válido";
-  static const String msgPassword = "La clave tener al menos de 8 caracteres";
+  static const String msgPassword = "Mínimo 8 caracteres";
   static const String labelClave = "Clave";
   static const String msgPassword2 = "La clave no coincide";
   static const String labelConfirmarClave = "Confirmar clave";
   static const String labelMostrarClave = "Mostrar clave";
-  static const String labelQuesCuenta1 = "¿No tiene una cuenta?";
-  static const String labelQuesCuenta2 = "Ya tiene cuenta?";
+  static const String labelQuesCuenta1 = "¿No tiene una cuenta? ";
+  static const String labelQuesCuenta2 = "¿Ya tiene cuenta? ";
   static const String labelOpCuenta1 = "Cree una";
   static const String labelOpCuenta2 = "Inicie sesión";
   static const String labelGoogle = "Continuar con Google";
