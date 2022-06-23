@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 
 class SearchListView extends ConsumerWidget {
@@ -14,8 +15,8 @@ class SearchListView extends ConsumerWidget {
           children: [
             TextField(
               decoration: const InputDecoration(
-                labelText: 'Buscar usuario',
-                hintText: 'Puede buscar por email o nombre de usuario',
+                labelText: Strings.labelBuscarUsuario,
+                hintText: Strings.hintBuscar,
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,

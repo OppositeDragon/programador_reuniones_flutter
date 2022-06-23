@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 import 'package:programador_reuniones_flutter/widgets/grupos_personal_widget.dart';
 import 'package:programador_reuniones_flutter/widgets/horas_trabajo_widget.dart';
@@ -20,7 +21,7 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: const AppBarWidget('Dashboard'),
+      appBar: const AppBarWidget(Strings.labelDashboard),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth < 600) {
@@ -78,15 +79,15 @@ class _DashboardViewState extends State<DashboardView> with SingleTickerProvider
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.tab_unselected_sharp),
-                  label: "Mi horario",
+                  label: Strings.labelHorario,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.timelapse),
-                  label: "Horas de trabajo",
+                  label: Strings.labelHorarioJob,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.group),
-                  label: "Mis grupos",
+                  label: Strings.labelMisGrupos,
                 ),
               ],
               currentIndex: paginaSeleccionada,

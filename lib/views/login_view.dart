@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 
@@ -47,7 +48,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             children: <Widget>[
                               const SizedBox(height: 32),
                               Text(
-                                isLogin ? 'Iniciar Sesion' : 'Crear cuenta',
+                                isLogin
+                                    ? Strings.labelIniciarSesion
+                                    : Strings.labelCrearCuenta,
                                 style: Theme.of(context).textTheme.headline4,
                               ),
                               const SizedBox(height: 32),
@@ -55,11 +58,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   key: const ValueKey('name'),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 2) {
-                                      return 'Debe tener al menos 2 caracteres';
+                                      return Strings.msgNameLastCarac;
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(labelText: "Nombre", border: OutlineInputBorder()),
+                                  decoration: const InputDecoration(
+                                      labelText: Strings.labelNombre,
+                                      border: OutlineInputBorder()),
                                   onSaved: (value) {
                                     _name = value!.trim();
                                   },
@@ -70,11 +75,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   key: const ValueKey('lastName'),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 2) {
-                                      return 'Debe tener al menos 2 caracteres';
+                                      return Strings.msgNameLastCarac;
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(labelText: "Apellido", border: OutlineInputBorder()),
+                                  decoration: const InputDecoration(
+                                      labelText: Strings.labelApellido,
+                                      border: OutlineInputBorder()),
                                   onSaved: (value) {
                                     _lastName = value!.trim();
                                   },
@@ -85,11 +92,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   key: const ValueKey('Nombre de usuario'),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 4) {
-                                      return 'Debe tener al menos 4 caracteres';
+                                      return Strings.msgUserName;
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(labelText: "Nombre de usuario", border: OutlineInputBorder()),
+                                  decoration: const InputDecoration(
+                                      labelText: Strings.labelUserName,
+                                      border: OutlineInputBorder()),
                                   onSaved: (value) {
                                     _user = value!.trim();
                                   },
@@ -101,11 +110,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                   keyboardType: TextInputType.phone,
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 6) {
-                                      return 'Debe tener al menos 6 numeros';
+                                      return Strings.msgPhone;
                                     }
                                     return null;
                                   },
-                                  decoration: const InputDecoration(labelText: "Numero de telefono", border: OutlineInputBorder()),
+                                  decoration: const InputDecoration(
+                                      labelText: Strings.labelPhone,
+                                      border: OutlineInputBorder()),
                                   onSaved: (value) {
                                     _phone = value!.trim();
                                   },
@@ -113,10 +124,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               if (!isLogin) const SizedBox(height: 24),
                               /*email */ TextFormField(
                                 key: const ValueKey('email'),
-                                decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+                                decoration: const InputDecoration(
+                                    labelText: Strings.labelEmail,
+                                    border: OutlineInputBorder()),
                                 validator: (value) {
-                                  if (value!.isEmpty || !value.contains('@') || value.length < 5) {
-                                    return 'Debe ingresar un correo electronico valido.';
+                                  if (value!.isEmpty ||
+                                      !value.contains('@') ||
+                                      value.length < 5) {
+                                    return Strings.msgEmail;
                                   }
                                   return null;
                                 },
@@ -133,12 +148,15 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                     child: TextFormField(
                                       key: const ValueKey('password'),
                                       validator: (value) {
-                                        if (value!.isEmpty || value.length < 8) {
-                                          return 'La clave tener almenos de 8 caracteres';
+                                        if (value!.isEmpty ||
+                                            value.length < 8) {
+                                          return Strings.msgPassword;
                                         }
                                         return null;
                                       },
-                                      decoration: const InputDecoration(labelText: 'Clave', border: OutlineInputBorder()),
+                                      decoration: const InputDecoration(
+                                          labelText: Strings.labelClave,
+                                          border: OutlineInputBorder()),
                                       obscureText: !_showPassword,
                                       onChanged: (value) {
                                         _password = value.trim();
@@ -155,11 +173,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                         key: const ValueKey('password2'),
                                         validator: (value) {
                                           if (value != _password) {
-                                            return 'La clave no coincide';
+                                            return Strings.msgPassword2;
                                           }
                                           return null;
                                         },
-                                        decoration: const InputDecoration(labelText: 'Confirmar clave', border: OutlineInputBorder()),
+                                        decoration: const InputDecoration(
+                                            labelText: Strings.labelConfirmarClave,
+                                            border: OutlineInputBorder()),
                                         obscureText: !_showPassword,
                                       ),
                                     ),
@@ -177,7 +197,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                       });
                                     },
                                   ),
-                                  const Text('Mostrar clave'),
+                                  const Text(Strings.labelMostrarClave),
                                 ],
                               ),
                               const SizedBox(height: 24),
@@ -187,7 +207,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(isLogin ? 'Iniciar sesion' : 'Crear cuenta'),
+                                  child: Text(isLogin
+                                      ? Strings.labelIniciarSesion
+                                      : Strings.labelCrearCuenta),
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -197,10 +219,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                       isLogin = !isLogin;
                                     });
                                   },
-                                  child: Row(mainAxisSize: MainAxisSize.min, children: [
-                                    Text(isLogin ? '¿No tiene una cuenta? ' : 'Ya tiene cuenta? '),
-                                    Text(isLogin ? 'Cree una' : 'Inicie sesion', style: const TextStyle(decoration: TextDecoration.underline)),
-                                  ])
+                                  child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(isLogin
+                                            ? Strings.labelQuesCuenta1
+                                            : Strings.labelQuesCuenta2),
+                                        Text(
+                                            isLogin
+                                                ? Strings.labelOpCuenta1
+                                                : Strings.labelOpCuenta2,
+                                            style: const TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline)),
+                                      ])
                                   //  Row(mainAxisSize: MainAxisSize.min,children: [
                                   //     const Text(),
                                   //     const Text(, style: TextStyle(decoration: TextDecoration.underline)),
@@ -211,14 +243,18 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               if (isLogin) const SizedBox(height: 8),
                               if (isLogin)
                                 ElevatedButton(
-                                  style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(66, 134, 245, 1)),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: const Color.fromRGBO(
+                                          66, 134, 245, 1)),
                                   onPressed: () async {
                                     ref.read(loginProvider).isLoading = true;
                                     await ref.read(loginProvider).loginGoogle();
                                     await ref.read(userProvider).getUserData();
-                                    Map<String, dynamic>? userData = ref.read(userProvider).userData;
+                                    Map<String, dynamic>? userData =
+                                        ref.read(userProvider).userData;
                                     await ref.read(userProvider).putUserData(
-                                          FirebaseAuth.instance.currentUser!.uid,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
                                           userData!['email'],
                                           userData['usuario'].toString(),
                                           userData['telefono'] ?? '',
@@ -233,16 +269,19 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                       Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
                                         height: 56,
                                         width: 56,
-                                        margin: const EdgeInsets.symmetric(vertical: 8),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                         padding: const EdgeInsets.all(12),
                                         child: Image.asset('assets/search.png'),
                                       ),
                                       const Expanded(
-                                        child: Text('Continuar con Google', textAlign: TextAlign.center),
+                                        child: Text(Strings.labelGoogle,
+                                            textAlign: TextAlign.center),
                                       ),
                                     ],
                                   ),
@@ -250,14 +289,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               if (isLogin) const SizedBox(height: 16),
                               if (isLogin)
                                 ElevatedButton(
-                                  style: ElevatedButton.styleFrom(primary: const Color.fromRGBO(71, 89, 147, 1)),
+                                  style: ElevatedButton.styleFrom(
+                                      primary:
+                                          const Color.fromRGBO(71, 89, 147, 1)),
                                   onPressed: () async {
                                     ref.read(loginProvider).isLoading = true;
-                                    await ref.read(loginProvider).loginFacebook();
+                                    await ref
+                                        .read(loginProvider)
+                                        .loginFacebook();
                                     await ref.read(userProvider).getUserData();
-                                    Map<String, dynamic>? userData = ref.read(userProvider).userData;
+                                    Map<String, dynamic>? userData =
+                                        ref.read(userProvider).userData;
                                     await ref.read(userProvider).putUserData(
-                                          FirebaseAuth.instance.currentUser!.uid,
+                                          FirebaseAuth
+                                              .instance.currentUser!.uid,
                                           userData!['email'],
                                           userData['usuario'].toString(),
                                           userData['telefono'] ?? '',
@@ -272,15 +317,19 @@ class _LoginViewState extends ConsumerState<LoginView> {
                                       Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
                                         height: 56,
-                                        margin: const EdgeInsets.symmetric(vertical: 8),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8),
                                         padding: const EdgeInsets.all(12),
-                                        child: Image.asset('assets/facebook.png'),
+                                        child:
+                                            Image.asset('assets/facebook.png'),
                                       ),
                                       const Expanded(
-                                        child: Text('Continuar con Facebook', textAlign: TextAlign.center),
+                                        child: Text(Strings.labelFacebook,
+                                            textAlign: TextAlign.center),
                                       ),
                                     ],
                                   ),
@@ -307,7 +356,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
       if (isLogin) {
         await ref.read(loginProvider).loginEmailPassword(_email, _password);
       } else {
-        final UserCredential authResult = await ref.read(loginProvider).createEmailPassword(_email, _password);
+        final UserCredential authResult = await ref
+            .read(loginProvider)
+            .createEmailPassword(_email, _password);
         await ref.read(userProvider).putUserData(
               authResult.user!.uid,
               _email,

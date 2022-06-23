@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 
 class HorasTrabajoWidget extends ConsumerStatefulWidget {
   const HorasTrabajoWidget({super.key});
@@ -13,7 +14,7 @@ class _HorasTrabajoWidgetState extends ConsumerState<HorasTrabajoWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'Horas de trabajo',
+        Strings.labelHorarioJob,
         style: Theme.of(context).textTheme.titleLarge,
       ),
     );

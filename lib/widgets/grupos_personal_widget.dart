@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_arc_text/flutter_arc_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 
 class GruposPersonal extends ConsumerStatefulWidget {
@@ -31,7 +32,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
               if (snapshot.data?.docs != null && snapshot.data!.docs.isEmpty) {
                 return Center(
                   child: Text(
-                    'Aun no tienes grupos',
+                    Strings.msgNoGrupos,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 );
@@ -57,7 +58,7 @@ class _GruposPersonalState extends ConsumerState<GruposPersonal> {
                                   startAngle: 4.0,
                                   radius: 11.4,
                                   textStyle: Theme.of(context).primaryTextTheme.bodySmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w800),
-                                  text: 'miembros',
+                                  text: Strings.labelMiembros,
                                   // startAngleAlignment: StartAngleAlignment.end,
                                   placement: Placement.outside,
                                   direction: Direction.clockwise),

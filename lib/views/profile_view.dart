@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/user_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
 import 'package:programador_reuniones_flutter/widgets/formulario_editar_perfil_widget.dart';
@@ -32,7 +33,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: const AppBarWidget('Perfil'),
+        appBar: const AppBarWidget(Strings.labelPerfil),
         body: Center(
           child: userData == null
               ? const CircularProgressIndicator()
@@ -120,7 +121,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                             onPressed: () {
                                               switchIsEditingState();
                                             },
-                                            child: Text(_isEditing ? "Actualizar datos" : 'Editar datos'),
+                                            child: Text(_isEditing ? Strings.labelActualizarDatos : Strings.labelEditarDatos),
                                           ),
                                       ],
                                     )
