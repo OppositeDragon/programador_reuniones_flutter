@@ -42,22 +42,28 @@ class _HorarioPersonalWidgetState extends ConsumerState<HorarioPersonalWidget> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (snapshot.data?.data() == null) {
-          return Center(
-            child: Text(
-              'Aun no ha creado un horario personal',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+        if (snapshot.data?.data() == null || snapshot.data!.data()!.isEmpty) {
+          return Stack(
+            children: [
+              Center(
+                child: Text(
+                  'Aun no ha creado un horario personal',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: FloatingActionButton(
+                  onPressed: () => ref.read(timetableProvider).createHorarioPersonal(),
+                  mini: true,
+                  child: const Icon(Icons.add),
+                ),
+              ),
+            ],
           );
         }
-        if (snapshot.data?.data() != null && snapshot.data!.data()!.isEmpty) {
-          return Center(
-            child: Text(
-              'Es necesario que cree un horario personal',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          );
-        }
+
         final horarioSemanal = SemanaHorarioPersonalModel.fromMap(snapshot.data!.data()!);
 
         return LayoutBuilder(
