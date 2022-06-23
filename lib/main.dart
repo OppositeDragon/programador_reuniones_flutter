@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:programador_reuniones_flutter/controllers/theme_controller.dart';
 import 'package:programador_reuniones_flutter/go_router.dart';
-import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
 
 import 'firebase_options.dart';
 

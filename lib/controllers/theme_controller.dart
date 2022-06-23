@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:programador_reuniones_flutter/theme/theme_data.dart';
+import 'package:programador_reuniones_flutter/constants/theme_constants.dart';
 
 final themeProvider = ChangeNotifierProvider<ThemeController>((ref) {
   return ThemeController();

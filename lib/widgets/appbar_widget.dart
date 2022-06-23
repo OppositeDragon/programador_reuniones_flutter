@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/login_controller.dart';
 import 'package:programador_reuniones_flutter/go_router.dart';
-import 'package:programador_reuniones_flutter/theme/theme_controller.dart';
+import 'package:programador_reuniones_flutter/controllers/theme_controller.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget(this.title, {super.key});
