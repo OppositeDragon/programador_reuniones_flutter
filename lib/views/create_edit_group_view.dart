@@ -139,6 +139,11 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                   ),
                                   title: Text('${sugerencia.nombre} ${sugerencia.apellido}'),
                                   subtitle: Text(sugerencia.userAndEmail),
+																	trailing: grupoDataTemp.integrantes.elementAt(index).userId == grupoDataTemp.admin
+                                    ? const Chip(
+                                        labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                                        label: Text(' ADMIN ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)))
+                                    : null,
                                   onTap: () {},
                                 ),
                               );
@@ -183,7 +188,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                 }
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 child: Text(
                                   widget.groupId == 'nuevo' ? Strings.labelGrupo : Strings.labelEditarGrupo,
                                   textAlign: TextAlign.center,
