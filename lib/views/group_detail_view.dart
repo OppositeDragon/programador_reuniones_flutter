@@ -50,7 +50,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Card(
                             elevation: 12,
-                            color: Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(context).colorScheme.inversePrimary,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
                               child: Row(
@@ -87,10 +87,9 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           style: textTheme.headline5,
                           textAlign: TextAlign.start,
                         ),
-                        Card(
+                        const Card(
                           elevation: 6,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          child: const SizedBox(
+                          child: SizedBox(
                             width: double.infinity,
                             height: 300,
                           ),
@@ -101,7 +100,6 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           textAlign: TextAlign.start,
                         ),
                         Card(
-                          color: Theme.of(context).colorScheme.inversePrimary,
                           elevation: 6,
                           child: SizedBox(
                             height: 250,
@@ -111,6 +109,11 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                               itemBuilder: (context, index) => ListTile(
                                 title: Text("${group.integrantes.elementAt(index).nombre} ${group.integrantes.elementAt(index).apellido}"),
                                 subtitle: Text(group.integrantes.elementAt(index).email),
+                                trailing: group.integrantes.elementAt(index).userId == group.admin
+                                    ? const Chip(
+                                        labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                                        label: Text(' ADMIN ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)))
+                                    : null,
                               ),
                               separatorBuilder: (context, index) => const Divider(),
                             ),
