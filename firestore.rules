@@ -10,8 +10,8 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.admin;
     }
     match /timetables/{uid} {
-      allow create: if request.auth != null;
-      allow read, update, delete: if request.auth != null && request.auth.uid == uid;
+      allow create,read: if request.auth != null;
+      allow  update, delete: if request.auth != null && request.auth.uid == uid;
     }
     
     // match /{document=**} {
