@@ -10,9 +10,9 @@ import 'package:programador_reuniones_flutter/models/user_model.dart';
 final groupProvider = ChangeNotifierProvider<GroupController>((ref) {
   return GroupController();
 });
-final getGruposProvider = StreamProvider<QuerySnapshot<Map<String, dynamic>>>((ref)  {
+final getGruposProvider = StreamProvider<QuerySnapshot<Map<String, dynamic>>>((ref) {
   final a = ref.watch(groupProvider);
-  return  a.getGrupos();
+  return a.getGrupos();
 });
 
 class GroupController with ChangeNotifier {
@@ -187,5 +187,9 @@ class GroupController with ChangeNotifier {
   void resetGroupData() {
     _groupData = GroupModel.empty();
     _groupDataTemp = GroupModel.empty();
+  }
+
+  void deleteGroup(String idGroup) {
+    FirebaseFirestore.instance.collection("groups").doc(idGroup).delete();
   }
 }
