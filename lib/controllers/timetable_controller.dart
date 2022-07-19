@@ -183,4 +183,8 @@ class TimetableController with ChangeNotifier {
     }
     return horarioSemana.fromListOfDays(listaDias);
   }
+
+  void setHorarioCompartido(String docId, MapEntry<String, String> entry, String diaCompleto) {
+    FirebaseFirestore.instance.collection("groups").doc(docId).set({'reunionTime': '$diaCompleto ${entry.key} - ${entry.value}'}, SetOptions(merge: true));
+  }
 }

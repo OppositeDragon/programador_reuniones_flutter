@@ -55,7 +55,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                           keyboardType: TextInputType.name,
                           validator: (value) {
                             if (value!.isEmpty || value.length < 4) {
-                              return  Strings.msgNameGrupo;
+                              return Strings.msgNameGrupo;
                             }
                             return null;
                           },
@@ -69,7 +69,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                         const SizedBox(height: 12),
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText:  Strings.labelDescGrupo,
+                            labelText: Strings.labelDescGrupo,
                             border: OutlineInputBorder(),
                           ),
                           controller: _descripcionTextController,
@@ -139,11 +139,15 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                   ),
                                   title: Text('${sugerencia.nombre} ${sugerencia.apellido}'),
                                   subtitle: Text(sugerencia.userAndEmail),
-																	trailing: grupoDataTemp.integrantes.elementAt(index).userId == grupoDataTemp.admin
-                                    ? const Chip(
-                                        labelPadding: EdgeInsets.symmetric(horizontal: 4),
-                                        label: Text(' ADMIN ', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)))
-                                    : null,
+                                  trailing: grupoDataTemp.integrantes.elementAt(index).userId == grupoDataTemp.admin
+                                      ? const Chip(
+                                          labelPadding: EdgeInsets.symmetric(horizontal: 4),
+                                          label: Text(
+                                            ' ADMIN ',
+                                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : null,
                                   onTap: () {},
                                 ),
                               );
@@ -159,7 +163,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text( Strings.labelProcesando), duration: Duration(milliseconds: 1500)),
+                                    const SnackBar(content: Text(Strings.labelProcesando), duration: Duration(milliseconds: 1500)),
                                   );
                                   String newGroupId = '';
                                   if (widget.groupId == 'nuevo') {
@@ -173,6 +177,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                           widget.groupId!,
                                           grupoDataTemp.nombre,
                                           grupoDataTemp.descripcion,
+                                          grupoDataTemp.reunionTime,
                                           grupoDataTemp.integrantes,
                                         );
                                   }
