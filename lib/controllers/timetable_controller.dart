@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/constants/constants.dart';
+import 'package:programador_reuniones_flutter/models/dia_horario_personal.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
-import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
+import 'package:programador_reuniones_flutter/models/semana_horario_personal_model.dart';
+import 'package:programador_reuniones_flutter/models/user_model.dart';
 
 final timetableProvider = ChangeNotifierProvider<TimetableController>((ref) {
   return TimetableController();
@@ -15,9 +17,58 @@ class TimetableController with ChangeNotifier {
   int _diaFin = 0;
   int _timeSlotInicio = 0;
   int _timeSlotFin = 0;
+  List<SemanaHorarioPersonalModel> _horariosDeGrupo = [];
+  List<SemanaHorarioPersonalModel> get horariosDeGrupo => _horariosDeGrupo;
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTimetable() {
     return FirebaseFirestore.instance.collection('timetables').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
+  }
+
+  Future<List<SemanaHorarioPersonalModel>> getTimetablesOfGroup(Set<UserModel> integrantes) async {
+    List<SemanaHorarioPersonalModel> horariosDeGrupos = [];
+    for (var integrante in integrantes) {
+      final timetable = await FirebaseFirestore.instance.collection('timetables').doc(integrante.userId).get();
+      final timetableData = timetable.data();
+      final horario = SemanaHorarioPersonalModel.fromMap(timetableData!);
+      horariosDeGrupos.add(horario);
+    }
+    _horariosDeGrupo = horariosDeGrupos;
+    notifyListeners();
+    return horariosDeGrupos;
+  }
+
+  List<Map<String, String>> horarioGrupalCalculado(List<SemanaHorarioPersonalModel> horarios) {
+    List<DiaHorarioPersonal> diasSemanaGrupal = [
+      DiaHorarioPersonal(weekDay: WeekDays.D, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.L, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.M, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.X, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.J, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.V, tiempos: <TimeSlot, int>{}),
+      DiaHorarioPersonal(weekDay: WeekDays.S, tiempos: <TimeSlot, int>{}),
+    ];
+    for (var horario in horarios) {
+      final dias = horario.toListOfDays();
+      for (var i = 0; i < dias.length; i++) {
+        for (var timeslot in TimeSlot.values) {
+          if (!diasSemanaGrupal[i].tiempos.containsKey(timeslot)) {
+            diasSemanaGrupal[i].tiempos[timeslot] = 0;
+          }
+          if (dias[i].tiempos[timeslot] == true) {
+            diasSemanaGrupal[i].tiempos[timeslot] += 1;
+          }
+        }
+      }
+    }
+    return [
+      diasSemanaGrupal[0].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[1].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[2].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[3].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[4].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[5].getChuncksOfTimeGrupal(),
+      diasSemanaGrupal[6].getChuncksOfTimeGrupal(),
+    ];
   }
 
   createHorarioPersonal() {
@@ -31,7 +82,12 @@ class TimetableController with ChangeNotifier {
       V: DiaHorarioPersonal(weekDay: WeekDays.V, tiempos: Contstants.allTimeslotsFalse),
       S: DiaHorarioPersonal(weekDay: WeekDays.S, tiempos: Contstants.allTimeslotsFalse),
     );
-    FirebaseFirestore.instance.collection("timetables").doc(FirebaseAuth.instance.currentUser!.uid).set(
+    FirebaseFirestore.instance
+        .collection("timetables")
+        .doc(
+          FirebaseAuth.instance.currentUser!.uid,
+        )
+        .set(
           horario.toMap(),
         );
   }
