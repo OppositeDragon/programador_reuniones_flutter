@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:programador_reuniones_flutter/constants/strings.dart';
 import 'package:programador_reuniones_flutter/controllers/group_controller.dart';
 import 'package:programador_reuniones_flutter/widgets/appbar_widget.dart';
+import 'package:programador_reuniones_flutter/widgets/horario_grupal_calculado.dart';
 
 class GroupDetailView extends ConsumerStatefulWidget {
   const GroupDetailView(this.groupId, {super.key});
@@ -87,13 +88,7 @@ class _GroupDetailViewState extends ConsumerState<GroupDetailView> {
                           style: textTheme.headline5,
                           textAlign: TextAlign.start,
                         ),
-                        const Card(
-                          elevation: 6,
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 300,
-                          ),
-                        ),
+                        const HorarioGrupalCalculado(),
                         Text(
                           Strings.labelIntegrantes,
                           style: textTheme.headline5,
