@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:programador_reuniones_flutter/controllers/timetable_controller.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
-import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
+import 'package:programador_reuniones_flutter/models/semana_horario_personal_model.dart';
 import 'package:programador_reuniones_flutter/painters/horario_painter.dart';
 
 class HorarioPersonalWidget extends ConsumerStatefulWidget {

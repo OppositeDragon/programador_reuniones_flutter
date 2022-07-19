@@ -2,8 +2,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:programador_reuniones_flutter/constants/constants.dart';
+import 'package:programador_reuniones_flutter/models/dia_horario_personal.dart';
 import 'package:programador_reuniones_flutter/models/enums.dart';
-import 'package:programador_reuniones_flutter/models/horario_personal_model.dart';
+import 'package:programador_reuniones_flutter/models/semana_horario_personal_model.dart';
 
 class HorarioPainter extends CustomPainter {
   final SemanaHorarioPersonalModel horarioSemanal;

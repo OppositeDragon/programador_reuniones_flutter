@@ -8,6 +8,7 @@ class GroupModel {
   String descripcion;
   String admin;
   String nombre;
+  String? reunionTime;
   Set<UserModel> integrantes;
   GroupModel({
     required this.docId,
@@ -15,6 +16,7 @@ class GroupModel {
     required this.admin,
     required this.nombre,
     required this.integrantes,
+    required this.reunionTime,
   });
   GroupModel.empty({
     this.docId = '',
@@ -29,6 +31,7 @@ class GroupModel {
     String? admin,
     String? nombre,
     Set<UserModel>? integrantes,
+    String? reunionTime,
   }) {
     return GroupModel(
       docId: docId ?? this.docId,
@@ -36,6 +39,7 @@ class GroupModel {
       admin: admin ?? this.admin,
       nombre: nombre ?? this.nombre,
       integrantes: integrantes ?? this.integrantes,
+      reunionTime: reunionTime ?? this.reunionTime,
     );
   }
 
@@ -47,6 +51,7 @@ class GroupModel {
     result.addAll({'admin': admin});
     result.addAll({'nombre': nombre});
     result.addAll({'integrantes': integrantes.map((x) => x.toMap()).toList()});
+    result.addAll({'reunionTime': reunionTime});
 
     return result;
   }
@@ -58,6 +63,7 @@ class GroupModel {
       admin: map['admin'] ?? '',
       nombre: map['nombre'] ?? '',
       integrantes: Set<UserModel>.from(map['integrantes']?.map((x) => UserModel.fromMap(x))),
+      reunionTime: map['reunionTime'] ,
     );
   }
 
@@ -67,7 +73,7 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'GroupModel(docId: $docId, descripcion: $descripcion, admin: $admin, nombre: $nombre, integrantes: $integrantes)';
+    return 'GroupModel(docId: $docId, descripcion: $descripcion, admin: $admin, nombre: $nombre,reunionTime:$reunionTime, integrantes: $integrantes)';
   }
 
   @override
@@ -79,11 +85,10 @@ class GroupModel {
         other.descripcion == descripcion &&
         other.admin == admin &&
         other.nombre == nombre &&
+        other.reunionTime == reunionTime &&
         setEquals(other.integrantes, integrantes);
   }
 
   @override
-  int get hashCode {
-    return docId.hashCode ^ descripcion.hashCode ^ admin.hashCode ^ nombre.hashCode ^ integrantes.hashCode;
-  }
+  int get hashCode => docId.hashCode ^ descripcion.hashCode ^ admin.hashCode ^ nombre.hashCode ^ reunionTime.hashCode ^ integrantes.hashCode;
 }

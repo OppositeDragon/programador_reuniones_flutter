@@ -38,10 +38,10 @@ class GroupController with ChangeNotifier {
       'admin': FirebaseAuth.instance.currentUser!.uid,
       'integrantes': members.toList(),
     }, SetOptions(merge: true));
-		return document.id;
+    return document.id;
   }
 
-  Future<void> updateGroup(String groupId, String nombre, String descripcion, Set<UserModel> integrantes) async {
+  Future<void> updateGroup(String groupId, String nombre, String descripcion, String? reunionTime, Set<UserModel> integrantes) async {
     Set<String> members = {};
     members.add(FirebaseAuth.instance.currentUser!.uid);
     for (var element in integrantes) {
@@ -54,6 +54,7 @@ class GroupController with ChangeNotifier {
       'descripcion': descripcion,
       'admin': FirebaseAuth.instance.currentUser!.uid,
       'integrantes': members.toList(),
+      'reunionTime': reunionTime
     });
     // resetGroupData();
     notifyListeners();
@@ -68,6 +69,7 @@ class GroupController with ChangeNotifier {
         descripcion: groupdata['descripcion'],
         admin: groupdata['admin'],
         nombre: groupdata['nombre'],
+        reunionTime: groupdata['reunionTime'],
         integrantes: integrantes);
     _groupData = groupData;
     _groupDataTemp = groupData.copyWith();
