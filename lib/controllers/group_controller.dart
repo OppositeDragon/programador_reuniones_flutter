@@ -10,6 +10,10 @@ import 'package:programador_reuniones_flutter/models/user_model.dart';
 final groupProvider = ChangeNotifierProvider<GroupController>((ref) {
   return GroupController();
 });
+final getGruposProvider = StreamProvider<QuerySnapshot<Map<String, dynamic>>>((ref)  {
+  final a = ref.watch(groupProvider);
+  return  a.getGrupos();
+});
 
 class GroupController with ChangeNotifier {
   Set<UserModel> _listaUsuarios = {};
