@@ -62,7 +62,7 @@ class GroupModel {
       descripcion: map['descripcion'] ?? '',
       admin: map['admin'] ?? '',
       nombre: map['nombre'] ?? '',
-      integrantes: Set<UserModel>.from(map['integrantes']?.map((x) => UserModel.fromMap(x))),
+      integrantes: Set<UserModel>.from( {}/* map['integrantes']?.map((x) => UserModel.fromMap(x))*/),
       reunionTime: map['reunionTime'] ,
     );
   }
