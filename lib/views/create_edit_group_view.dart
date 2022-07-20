@@ -90,9 +90,12 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                           },
                         ),
                         const SizedBox(
-                          width: 60,
+                          width: double.infinity,
                           height: 50,
-                          child: VerticalDivider(width: 2),
+                          child: Divider(
+                            height: 2,
+                            color: Colors.black,
+                          ),
                         ),
                         const Text(Strings.labelBuscar),
                         IconButton(
@@ -123,8 +126,6 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                 ),
                                 onDismissed: (direction) {
                                   ref.read(groupProvider).removeIntegrate(sugerencia);
-                                  print('integrantesTemp: ${grupoDataTemp.integrantes}');
-                                  print('integrantes: ${ref.read(groupProvider).groupData.integrantes}');
                                   // setState(() {
                                   //   grupoDataTemp.integrantes.remove(grupoDataTemp.integrantes.elementAt(index));
                                   // });
@@ -158,6 +159,22 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
+                            if (widget.groupId != 'nuevo')
+                              if (widget.groupId != 'nuevo')
+                                ElevatedButton(
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.error)),
+                                  onPressed: () {
+                                    ref.read(groupProvider).deleteGroup(widget.groupId!);
+                                    context.goNamed('dashboard');
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 4),
+                                    child: Text(
+                                      Strings.labelEliminarGrupo,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                             ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
@@ -193,7 +210,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                 }
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
                                 child: Text(
                                   widget.groupId == 'nuevo' ? Strings.labelGrupo : Strings.labelEditarGrupo,
                                   textAlign: TextAlign.center,
@@ -205,7 +222,7 @@ class _CreateGroupView extends ConsumerState<CreateEditGroupView> {
                                 context.pop();
                               },
                               child: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                                padding: EdgeInsets.symmetric(horizontal: 4),
                                 child: Text(
                                   Strings.labelCancelar,
                                   textAlign: TextAlign.center,

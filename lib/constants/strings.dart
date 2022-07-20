@@ -6,6 +6,7 @@ class Strings {
   static const String buttonPerfil = "Perfil";
   static const String labelGrupo = "Crear grupo";
   static const String labelEditarGrupo = "Editar grupo";
+  static const String labelEliminarGrupo = "Eliminar Grupo";
   static const String msgAdmin = "Solo el administrador del grupo puede editarlo";
   static const String buttonReturnInicio = "Volver a inicio";
   static const String buttonDetailGrupo = "Detalle del grupo";
