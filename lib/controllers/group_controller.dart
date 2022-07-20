@@ -15,18 +15,41 @@ final getGruposProvider = StreamProvider<QuerySnapshot<Map<String, dynamic>>>((r
   return a.getGrupos();
 });
 
+/// Clase que controla el todo lo relacionado con los grupos, creacion, edicion, borrado, etc
+
 class GroupController with ChangeNotifier {
+  /// [Set] de [UserModel] que contiene los usuarios que pertenecen a un grupo
   Set<UserModel> _listaUsuarios = {};
+
+  /// Objeto de tipo [GroupModel] que contiene los datos del grupo actual, pero se inicializa con [GroupModel.empty]
   GroupModel _groupData = GroupModel.empty();
+
+  /// Objeto temporal de tipo [GroupModel] que contiene los datos del grupo actual, pero se inicializa con [GroupModel.empty], usado para la edicen de un grupo
   GroupModel _groupDataTemp = GroupModel.empty();
 
+  /// [get]ter para [_listaUsuarios] [returns]  un [Set] de [UserModel].
   Set<UserModel> get listaUsuarios => _listaUsuarios;
+
+  /// [get]ter para [_groupData] [returns] un [GroupModel].
   GroupModel get groupData => _groupData;
+
+  /// [get]ter para [_groupDataTemp] [returns] un [GroupModel].
   GroupModel get groupDataTemp => _groupDataTemp;
 
+  ///[set]er para establecer el nombre del grupo, toma un [String] como parametro y lo establece en [_groupDataTemp.nombre]
+  ///
+  ///'''dart
+  ///nombreGrupo = 'Nombre del grupo';
+  ///entonces _groupDataTemp.nombre = nombreGrupo;
+  ///'''
   set nombreGrupo(String nombre) => _groupDataTemp.nombre = nombre;
+
+  ///[set]er para establecer la descripcion del grupo, toma un [String] como parametro y lo establece en [_groupDataTemp.descripcion]
   set descripcionGrupo(String descripcion) => _groupDataTemp.descripcion = descripcion;
 
+  /// Crea un grupo, toma un [nombre], [descripcion] y [listaUsuarios] como parametros,
+  /// y los agrega a la base de datos.
+  /// [SetOptions] tiene la opcion merge establecido en [true]
   Future<String> createGroup(String nombre, String descripcion, Set<UserModel> integrantes) async {
     Set<String> members = {};
     members.add(FirebaseAuth.instance.currentUser!.uid);
@@ -45,6 +68,9 @@ class GroupController with ChangeNotifier {
     return document.id;
   }
 
+  /// Actualiza el grupo actual, toma el [groupId], [nombre], [descripcion], [reunionTime] e [integrantes] como parametros,
+  /// [reunionTime] puede ser enviado como [null] o [String].
+  /// [SetOptions] no se establece en este metodo.
   Future<void> updateGroup(String groupId, String nombre, String descripcion, String? reunionTime, Set<UserModel> integrantes) async {
     Set<String> members = {};
     members.add(FirebaseAuth.instance.currentUser!.uid);
@@ -64,6 +90,8 @@ class GroupController with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Obtiene un grupo, toma un [groupId] como parametro, y lo obtiene de la base de datos.
+  /// [returns] un [GroupModel], envuelto en [Future].
   Future<GroupModel> getGroupById(String? groupId) async {
     final docRef = await FirebaseFirestore.instance.collection("groups").doc(groupId).get();
     final groupdata = docRef.data();
@@ -81,7 +109,12 @@ class GroupController with ChangeNotifier {
     return _groupData;
   }
 
-  Future<void> getUsers(String value) async {
+  /// Busca usuarios de la aplicacion, toma un [value] de tipo [String] como parametro,
+  /// que puede ser un nombre de usuario , un correo electronico.
+  /// este metodo llama a los metodos [getUsersByUser] y [getUsersByEmail]
+  /// y los une en un solo [Set], asi evita duplicidad.
+  /// Este [Set] de [UserModel] se guarda en la variable [_listaUsuarios].
+  Future<void> searchUsers(String value) async {
     Set<UserModel> setUsuarios = {};
     final usersByUser = await getUsersByUser(value);
     final usersByEmail = await getUsersByEmail(value);
@@ -113,25 +146,29 @@ class GroupController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getUsersByUser(String value) async {
+  /// Obtiene una lista de usuarios, toma un [username] como parametro, y lo obtiene de la base de datos.
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsersByUser(String username) async {
     final usersRef = await FirebaseFirestore.instance
         .collection("users")
-        .where("usuario", isGreaterThanOrEqualTo: value)
-        .where("usuario", isLessThanOrEqualTo: '$value\uf8ff')
+        .where("usuario", isGreaterThanOrEqualTo: username)
+        .where("usuario", isLessThanOrEqualTo: '$username\uf8ff')
         .get();
 
     return usersRef;
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getUsersByEmail(String value) async {
+  /// Obtiene una lista de usuarios, toma un [email] como parametro, y lo obtiene de la base de datos.
+  Future<QuerySnapshot<Map<String, dynamic>>> getUsersByEmail(String email) async {
     final usersRef = await FirebaseFirestore.instance
         .collection("users")
-        .where("email", isGreaterThanOrEqualTo: value)
-        .where("email", isLessThanOrEqualTo: '$value\uf8ff')
+        .where("email", isGreaterThanOrEqualTo: email)
+        .where("email", isLessThanOrEqualTo: '$email\uf8ff')
         .get();
     return usersRef;
   }
 
+  ///Obtiene los grupos en los que se encuentar el usuario autenticado.
+  /// [returns] un [Stream] de [QuerySnapshot].
   Stream<QuerySnapshot<Map<String, dynamic>>> getGrupos() {
     final grupos = FirebaseFirestore.instance
         .collection("groups")
@@ -143,6 +180,8 @@ class GroupController with ChangeNotifier {
     return grupos;
   }
 
+  /// Obtiene los datos de la [lIntegrantes] que toma como parametro.
+  /// Los [returns] como un [Set] de [UserModel].
   Future<Set<UserModel>> getIntegrantes(List<dynamic> lIntegrantes) async {
     final Set<UserModel> integrantes = {};
     for (String element in lIntegrantes) {
@@ -165,6 +204,8 @@ class GroupController with ChangeNotifier {
     return integrantes;
   }
 
+  ///Permite agregar un integrate al grupo, toma como parametro un objeto [UserModel],
+  /// y lo agrega los integrates del objeto [_groupDataTemp].
   void addIntegrante(UserModel user) {
     Set<UserModel> integrantes = {};
     integrantes.add(user);
@@ -175,6 +216,8 @@ class GroupController with ChangeNotifier {
     notifyListeners();
   }
 
+  ///Permite remover un integrate del grupo, toma como parametro un objeto [UserModel],
+  /// y lo elimina de los integrates del objeto [_groupDataTemp].
   void removeIntegrate(UserModel integrante) {
     Set<UserModel> integrantes = {};
     for (var element in _groupDataTemp.integrantes) {
@@ -184,11 +227,13 @@ class GroupController with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Establece las variables [_groupDataTemp] y [_groupData] con los valores por defecto [GroupModel.empty].
   void resetGroupData() {
     _groupData = GroupModel.empty();
     _groupDataTemp = GroupModel.empty();
   }
 
+  /// Elimina un grupo de la base de datos. Toma como parametro un [groupId] de tipo [String].
   void deleteGroup(String idGroup) {
     FirebaseFirestore.instance.collection("groups").doc(idGroup).delete();
   }

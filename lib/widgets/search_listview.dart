@@ -21,7 +21,7 @@ class SearchListView extends ConsumerWidget {
               ),
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
-                if (value.length >= 3) ref.read(groupProvider).getUsers(value);
+                if (value.length >= 3) ref.read(groupProvider).searchUsers(value);
               },
             ),
             const SizedBox(height: 16),
